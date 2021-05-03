@@ -1,17 +1,12 @@
 <idea-plugin>
-  <id>com.zll.format</id>
-  <name>flutter_json_format</name>
-  <version>2.1</version>
-  <vendor email="413700858@qq.com" url="https://github.com/neverwoodsS">neverwoods</vendor>
+  <id>flutter_json_format_ng</id>
+  <name>flutter_json_format_ng</name>
+  <version>3.0</version>
+  <vendor email="ay@justprodev.com" url="https://github.com/justprodev">ay</vendor>
 
   <description>
-    Help to generate Dart data class from JSON string.
+    Help to generate Dart data class from JSON string. Forked from original plugin "flutter_json_format"
   </description>
-
-  <change-notes>
-    fix issue#6;
-    generate toJson function code;
-  </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="172.0"/>

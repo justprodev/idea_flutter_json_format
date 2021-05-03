@@ -3,9 +3,6 @@ package com.zll.format
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.components.JBScrollPane
-import com.zll.format.ClazzGenerator
-import com.zll.format.Settings
-import com.zll.format.Util
 import javax.swing.*
 
 class UiBuilder(private val project: Project, private val virtualFile: VirtualFile) {

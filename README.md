@@ -1,3 +1,7 @@
+Forked from original plugin "flutter_json_format" added nullsafety variant of a generated files.
+
+Original README below:
+
 ### Update
 #### ver 2.1
 
@@ -152,16 +156,16 @@ class Test {
   static Test fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
     Test testBean = Test();
-    testBean.names = List()..addAll(
+    testBean.names = []..addAll(
       (map['names'] as List ?? []).map((o) => o.toString())
     );
-    testBean.ages = List()..addAll(
+    testBean.ages = []..addAll(
       (map['ages'] as List ?? []).map((o) => int.tryParse(o.toString()))
     );
-    testBean.stars = List()..addAll(
+    testBean.stars = []..addAll(
       (map['stars'] as List ?? []).map((o) => double.tryParse(o.toString()))
     );
-    testBean.marrieds = List()..addAll(
+    testBean.marrieds = []..addAll(
       (map['marrieds'] as List ?? []).map((o) => o.toString() == 'true')
     );
     return testBean;
@@ -195,7 +199,7 @@ class Test {
   static Test fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
     Test testBean = Test();
-    testBean.programmers = List()..addAll(
+    testBean.programmers = []..addAll(
       (map['programmers'] as List ?? []).map((o) => ProgrammersBean.fromMap(o))
     );
     return testBean;
@@ -234,8 +238,8 @@ class Test {
   static Test fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
     Test testBean = Test();
-    testBean.something = List()..addAll(
-      (map['something'] as List ?? []).map((o) => List()..addAll((o as List ?? []).map((oo) => List()..addAll((oo as List ?? []).map((ooo) => List()..addAll((ooo as List ?? []).map((oooo) => List()..addAll((oooo as List ?? []).map((ooooo) => int.tryParse(ooooo.toString()))))))))))
+    testBean.something = []..addAll(
+      (map['something'] as List ?? []).map((o) => []..addAll((o as List ?? []).map((oo) => []..addAll((oo as List ?? []).map((ooo) => []..addAll((ooo as List ?? []).map((oooo) => []..addAll((oooo as List ?? []).map((ooooo) => int.tryParse(ooooo.toString()))))))))))
     );
     return testBean;
   }
@@ -261,8 +265,8 @@ class Test {
   static Test fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
     Test testBean = Test();
-    testBean.something = List()..addAll(
-      (map['something'] as List ?? []).map((o) => List()..addAll((o as List ?? []).map((oo) => List()..addAll((oo as List ?? []).map((ooo) => List()..addAll((ooo as List ?? []).map((oooo) => List()..addAll((oooo as List ?? []).map((ooooo) => SomethingBean.fromMap(ooooo))))))))))
+    testBean.something = []..addAll(
+      (map['something'] as List ?? []).map((o) => []..addAll((o as List ?? []).map((oo) => []..addAll((oo as List ?? []).map((ooo) => []..addAll((ooo as List ?? []).map((oooo) => []..addAll((oooo as List ?? []).map((ooooo) => SomethingBean.fromMap(ooooo))))))))))
     );
     return testBean;
   }

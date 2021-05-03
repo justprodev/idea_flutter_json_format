@@ -59,7 +59,7 @@ abstract class Clazz(
         private fun Any.isBoolean() = toString().let { it == "true" || it == "false" }
     }
 
-    fun getStatement() = "${getClassName()} ${getCamelName()};"
+    fun getStatement() = "final ${getClassName()}? ${getCamelName()};"
     fun getFieldName() = Util.toLowerCaseFirstOne(getClassName())
     fun getCamelName() = name.split("_").reduce { acc, s -> "$acc${Util.toUpperCaseFirstOne(s)}" }
     fun getComment() = "$name : ${content.toString().replace("\n", "")}"
@@ -78,7 +78,7 @@ data class EmptyClazz(
 ) : Clazz(root, name, content, children) {
 
     override fun getClassName() = "dynamic"
-    override fun getAssignments(parent: String) = listOf("$parent.${getCamelName()} = map['$name'];")
+    override fun getAssignments(parent: String) = listOf("map['$name'],")
     override fun map(obj: String) = ""
 }
 
@@ -91,12 +91,12 @@ data class BaseClazz(
 ) : Clazz(root, name, content, children) {
 
     override fun getClassName() = type
-    override fun getAssignments(parent: String) = listOf("$parent.${getCamelName()} = map['$name'];")
+    override fun getAssignments(parent: String) = listOf("map['$name'],")
     override fun map(obj: String): String {
         return when (type) {
             "bool" -> "$obj.toString() == 'true'"
-            "int" -> "int.tryParse($obj.toString())"
-            "double" -> "double.tryParse($obj.toString())"
+            "int" -> "int.tryParse($obj.toString()) ?? 0"
+            "double" -> "double.tryParse($obj.toString()) ?? 0.0"
             else -> "$obj.toString()"
         }
     }
@@ -113,7 +113,7 @@ data class ObjectClazz(
     }
 
     override fun getClassName() = "${Util.toUpperCaseFirstOne(name)}Bean"
-    override fun getAssignments(parent: String) = listOf("$parent.${getCamelName()} = ${getClassName()}.fromMap(map['$name']);")
+    override fun getAssignments(parent: String) = listOf("${getClassName()}.fromMap(map['$name']),")
     override fun map(obj: String): String {
         return "${getClassName()}.fromMap($obj)"
     }
@@ -130,16 +130,16 @@ data class ListClazz(
     override fun getClassName() = "List<${child?.getClassName() ?: "dynamic"}>"
 
     override fun map(obj: String): String {
-        return if (child == null || child is EmptyClazz) "List()..addAll($obj as List)"
-        else "List()..addAll(($obj as List ?? []).map((${obj}o) => ${child.map("${obj}o")}))"
+        return if (child == null || child is EmptyClazz) "[]..addAll($obj as List)"
+        else "[]..addAll(($obj as List ?? []).map((${obj}o) => ${child.map("${obj}o")}))"
     }
 
     override fun getAssignments(parent: String): List<String> {
-        return if (child == null || child is EmptyClazz) listOf("$parent.${getCamelName()} = map['$name'];")
+        return if (child == null || child is EmptyClazz) listOf("map['$name'],")
         else listOf(
-            "$parent.$name = List()..addAll(",
+            "[]..addAll(",
             "  (map['$name'] as List ?? []).map((o) => ${child.map("o")})",
-            ");"
+            "),"
         )
     }
 }

@@ -67,21 +67,31 @@ class ClazzGenerator(val settings: Settings?) {
 
         // 输出 fromMap 头
         sb.append("\n")
+        sb.append("$spaceStr  ").append(className).append("(")
+        // 输出数据提取及转换
+        clazz.children?.map {
+            "this.${it.getCamelName()}, "
+        }?.forEach {
+            sb.append(it)
+        }
+        sb.deleteCharAt(sb.length-1).deleteCharAt(sb.length-1)
+        sb.append(");")
+        sb.append("\n\n")
         sb.append("$spaceStr  static ").append(className).append(" fromMap(Map<String, dynamic> map) {")
         sb.append("\n")
-        sb.append("$spaceStr    ").append("if (map == null) return null;")
-        sb.append("\n")
-        sb.append("$spaceStr    ").append(className).append(" ").append(clazz.getFieldName()).append(" = ").append(className).append("();")
+        sb.append("$spaceStr    ").append(className).append(" ").append(clazz.getFieldName()).append(" = ").append(className).append("(")
         sb.append("\n")
 
         // 输出数据提取及转换
         clazz.children?.flatMap { it.getAssignments(clazz.getFieldName()) }?.filterNot { it.isEmpty() }?.map {
-            "$spaceStr    $it\n"
+            "$spaceStr     $it\n"
         }?.forEach {
             sb.append(it)
         }
+        sb.append("$spaceStr    );")
 
         // 输出 fromMap 尾
+        sb.append("\n")
         sb.append("$spaceStr    return ${clazz.getFieldName()};")
         sb.append("\n")
         sb.append("$spaceStr  }")
