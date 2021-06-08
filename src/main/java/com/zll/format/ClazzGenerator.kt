@@ -69,12 +69,14 @@ class ClazzGenerator(val settings: Settings?) {
         sb.append("\n")
         sb.append("$spaceStr  ").append(className).append("(")
         // 输出数据提取及转换
-        clazz.children?.map {
-            "this.${it.getCamelName()}, "
-        }?.forEach {
-            sb.append(it)
+        if(!clazz.children.isNullOrEmpty()) {
+            clazz.children!!.map {
+                "this.${it.getCamelName()}, "
+            }.forEach {
+                sb.append(it)
+            }
+            sb.deleteCharAt(sb.length-1).deleteCharAt(sb.length-1)
         }
-        sb.deleteCharAt(sb.length-1).deleteCharAt(sb.length-1)
         sb.append(");")
         sb.append("\n\n")
         sb.append("$spaceStr  static ").append(className).append(" fromMap(Map<String, dynamic> map) {")
