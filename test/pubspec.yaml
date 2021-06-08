@@ -1,0 +1,11 @@
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+name: flutter_format_ng_test
+description: Testing flutter_format_ng_test plugin
+version: 1.0.0
+
+dependencies:
+
+dev_dependencies:
+  test: ^1.17.5

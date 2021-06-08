@@ -112,7 +112,8 @@ class ClazzGenerator(val settings: Settings?) {
         }
 
         // 输入 toJson 尾
-        sb.append("$spaceStr  };")
+        if(settings?.clearNulls == true) sb.append("$spaceStr  }..removeWhere((k,v)=>v==null);")
+        else sb.append("$spaceStr  };")
 
         // 输出 class 尾
         sb.append("\n")

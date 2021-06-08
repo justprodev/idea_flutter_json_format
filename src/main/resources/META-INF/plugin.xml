@@ -1,14 +1,16 @@
 <idea-plugin>
-  <id>flutter_json_format_ng</id>
-  <name>flutter_json_format_ng</name>
-  <version>3.0</version>
-  <vendor email="ay@justprodev.com" url="https://github.com/justprodev">ay</vendor>
+  <id>DartJsonGenerator</id>
+  <name>DartJsonGenerator</name>
+  <version>3.1.1</version>
+  <vendor email="dart@justprodev.com" url="https://github.com/justprodev">ay</vendor>
 
   <description>
-    New generation version of "flutter_json_format".
-    The main difference of the "flutter_main_json" is that this plugin generates immutable "Sound Null Safety" classes.
-    Help to generate Dart data class from JSON string.
-    Forked from original plugin "flutter_json_format"
+    To generating dart model for serializing/deserializing JSON, based on JSON example.
+    Generates simple objects - just serializing/deserializing and no more.
+    Checking while generating models.
+    Forked from plugin "flutter_json_format": added sound null-safety, fixed deserializing, etc.
+    Tested with Dart >= 2.12 (Flutter).
+    (Used carefully in production)
   </description>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
@@ -27,7 +29,7 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="DartJsonFormat" class="com.zll.format.DartJsonFormatAction" text="flutter json format">
+    <action id="DartJsonGenerator" class="com.zll.format.DartJsonFormatAction" text="DartJsonGenerator">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="meta N"/>
     </action>

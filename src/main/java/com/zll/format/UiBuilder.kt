@@ -3,6 +3,8 @@ package com.zll.format
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.components.JBScrollPane
+import java.awt.BorderLayout
+import java.awt.FlowLayout
 import javax.swing.*
 
 class UiBuilder(private val project: Project, private val virtualFile: VirtualFile) {
@@ -11,6 +13,7 @@ class UiBuilder(private val project: Project, private val virtualFile: VirtualFi
 
     fun build(): JComponent {
         return JPanel().apply {
+            border = BorderFactory.createEmptyBorder(10,0,10,0)
             placeComponents(this)
         }
     }
@@ -19,46 +22,53 @@ class UiBuilder(private val project: Project, private val virtualFile: VirtualFi
         val className = Util.toUpperCaseFirstOne(virtualFile.nameWithoutExtension).split("_").reduce { acc, s -> "$acc${Util.toUpperCaseFirstOne(s)}" }
         val settings = Settings()
 
-        layout = null
-
-        val tipLabel = JLabel("class name: $className").apply {
-            setBounds(10, 0, 500, 40)
-        }
-
         val jsonText = JTextArea().apply {
-            setBounds(10,50,680,400)
+            toolTipText = "Paste JSON example here"
         }
+        val tipLabel = JLabel("class name: $className")
+        val commentCb = JCheckBox("generate comments", settings.generateComments)
+        val clearNulls = JCheckBox("clear nulls while deserialize", settings.clearNulls)
 
-        val commentCb = JCheckBox("generate comments", settings.generateComments).apply {
-            setBounds(10, 460, 200, 30)
-        }
+        layout = BorderLayout()
 
-        add(JButton("ok").apply {
-            setBounds(600, 460, 80, 30)
-            isVisible = true
-            addActionListener {
-                // 保存配置
-                settings.generateComments = commentCb.isSelected
-                settings.save()
+        add(JPanel().apply {
+            // up
+            add(tipLabel)
+        }, BorderLayout.NORTH)
 
-                // 开始生成代码
-                val classesString = ClazzGenerator(settings).generate(className, jsonText.text)
-                if (classesString.startsWith("error:")) {
-                    tipLabel.text = classesString
-                } else {
-                    Util.writeToFile(project, virtualFile, classesString)
-                    frame?.dispose()
+        add(JPanel().apply {
+            //center
+            layout = BorderLayout()
+            border = BorderFactory.createEmptyBorder(10,10,10,10)
+            add(JBScrollPane(jsonText).apply {
+                verticalScrollBarPolicy = JBScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+                horizontalScrollBarPolicy = JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+            })
+        }, BorderLayout.CENTER)
+
+        add(JPanel().apply {
+            // down
+            layout = FlowLayout()
+            add(commentCb)
+            add(clearNulls)
+            add(JButton("ok").apply {
+                isVisible = true
+                addActionListener {
+                    // 保存配置
+                    settings.generateComments = commentCb.isSelected
+                    settings.clearNulls = clearNulls.isSelected
+                    settings.save()
+
+                    // 开始生成代码
+                    val classesString = ClazzGenerator(settings).generate(className, jsonText.text)
+                    if (classesString.startsWith("error:")) {
+                        tipLabel.text = classesString
+                    } else {
+                        Util.writeToFile(project, virtualFile, classesString)
+                        frame?.dispose()
+                    }
                 }
-            }
-        })
-
-        add(JBScrollPane(jsonText).apply {
-            verticalScrollBarPolicy = JBScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
-            horizontalScrollBarPolicy = JBScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
-            setBounds(10, 50, 680, 400)
-        })
-
-        add(commentCb)
-        add(tipLabel)
+            })
+        }, BorderLayout.SOUTH)
     }
 }
