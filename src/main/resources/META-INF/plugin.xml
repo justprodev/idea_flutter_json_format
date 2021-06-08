@@ -5,7 +5,10 @@
   <vendor email="ay@justprodev.com" url="https://github.com/justprodev">ay</vendor>
 
   <description>
-    Help to generate Dart data class from JSON string. Forked from original plugin "flutter_json_format"
+    New generation version of "flutter_json_format".
+    The main difference of the "flutter_main_json" is that this plugin generates immutable "Sound Null Safety" classes.
+    Help to generate Dart data class from JSON string.
+    Forked from original plugin "flutter_json_format"
   </description>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
