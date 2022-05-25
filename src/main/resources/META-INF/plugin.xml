@@ -1,20 +1,16 @@
 <idea-plugin>
   <id>DartJsonGenerator</id>
   <name>DartJsonGenerator</name>
-  <version>3.1.1</version>
   <vendor email="dart@justprodev.com" url="https://github.com/justprodev">ay</vendor>
 
   <description>
     To generating dart model for serializing/deserializing JSON, based on JSON example.
     Generates simple objects - just serializing/deserializing and no more.
     Checking while generating models.
-    Forked from plugin "flutter_json_format": added sound null-safety, fixed deserializing, etc.
-    Tested with Dart >= 2.12 (Flutter).
-    (Used carefully in production)
   </description>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="172.0"/>
+  <idea-version since-build="145.0"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->

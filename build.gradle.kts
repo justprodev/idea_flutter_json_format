@@ -35,14 +35,8 @@ dependencies {
 // Configure gradle-intellij-plugin plugin.
 // Read more: https://github.com/JetBrains/gradle-intellij-plugin
 intellij {
-    pluginName = properties("pluginName")
-    version = properties("platformVersion")
-    type = properties("platformType")
-    downloadSources = properties("platformDownloadSources").toBoolean()
-    updateSinceUntilBuild = true
-
-    // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
-    setPlugins(*properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty).toTypedArray())
+    pluginName = "DartJsonGenerator"
+    version = "2017.1"
 }
 
 // Configure gradle-changelog-plugin plugin.
@@ -80,24 +74,7 @@ tasks {
     }
 
     patchPluginXml {
-        version(properties("pluginVersion"))
-        sinceBuild(properties("pluginSinceBuild"))
-        untilBuild(properties("pluginUntilBuild"))
-
-//        // Extract the <!-- Plugin description --> section from README.md and provide for the plugin's manifest
-//        pluginDescription(
-//            closure {
-//                File(projectDir, "README.md").readText().lines().run {
-//                    val start = "<!-- Plugin description -->"
-//                    val end = "<!-- Plugin description end -->"
-//
-//                    if (!containsAll(listOf(start, end))) {
-//                        throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
-//                    }
-//                    subList(indexOf(start) + 1, indexOf(end))
-//                }.joinToString("\n").run { markdownToHTML(this) }
-//            }
-//        )
+        untilBuild("")
 
         // Get the latest available change notes from the changelog file
         changeNotes(
