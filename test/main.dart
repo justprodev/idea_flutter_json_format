@@ -8,7 +8,7 @@ void main() {
   group('json', () {
     test('serialize and deserialize', () async {
       // read json source
-      final plainJson1 = await File('test2.json').readAsString();
+      final plainJson1 = await File('test.json').readAsString();
       // create model from source
       final model1 = TestModel.fromMap(json.decode(plainJson1));
 
