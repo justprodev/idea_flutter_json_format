@@ -25,3 +25,6 @@
 hs_err_pid*
 /.gradle/
 /build/
+/test/.packages
+/test/.dart_tool/package_config.json
+/test/pubspec.lock
