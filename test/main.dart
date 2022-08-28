@@ -7,16 +7,18 @@ import 'TestModel.dart';
 void main() {
   group('json', () {
     test('serialize and deserialize', () async {
-      var json = await File('test2.json').readAsString();
-      var map = JsonDecoder().convert(json);
+      // read json source
+      final plainJson1 = await File('test2.json').readAsString();
+      // create model from source
+      final model1 = TestModel.fromMap(json.decode(plainJson1));
 
-      print(map);
+      // reconstruct json source from model file
+      final plainJson2 = json.encode(model1.toJson());
+      // create model again from reconstructed source
+      final model2 = TestModel.fromMap(json.decode(plainJson2));
 
-      var map2 = TestModel.fromMap(map).toJson();
-
-      print(map2);
-
-      expect(true, map.toString() == map2.toString());
+      // compare deserialized jsons from the models
+      expect(true, model2.toJson().toString() == model1.toJson().toString());
     });
   });
 }
