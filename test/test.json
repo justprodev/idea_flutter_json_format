@@ -1,22 +1,6 @@
 {
   "code": "2000",
   "data": {
-    "objectArray": [
-      {"a": 1,"b": 2},
-      {"a": 3,"b": 4},
-      {"a": 5,"b": 6}
-    ],
-    "expressAddress": {
-      "address": "控江路1209",
-      "createdDatetime": "2015-12-09 19:36:38",
-      "receiver": "张**",
-      "receiverCellphone": "1502379****",
-      "sid": "c25c1954ca204dee8fc18f51bcc71a3e",
-      "sortNumber": 1,
-      "title": "先生",
-      "type": "EXPRESS",
-      "userSid": "a19cf6e3586143d283dd4128c456bfaf"
-    },
     "facetofaceAddress": {
       "address": "",
       "receiver": "罗",
