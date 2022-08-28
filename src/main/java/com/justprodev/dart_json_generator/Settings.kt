@@ -8,14 +8,14 @@ class Settings {
         private const val KEY_COMMENT = "dart_json_format_comment"
     }
 
-    var generateComments: Boolean
+    //var generateComments: Boolean
 
     init {
         val propertiesComponent = PropertiesComponent.getInstance()
-        generateComments = propertiesComponent.getBoolean(KEY_COMMENT, true)
+        //generateComments = propertiesComponent.getBoolean(KEY_COMMENT, true)
     }
 
     fun save() = PropertiesComponent.getInstance().apply {
-        setValue(KEY_COMMENT, generateComments.toString())
+        //setValue(KEY_COMMENT, generateComments.toString())
     }
 }

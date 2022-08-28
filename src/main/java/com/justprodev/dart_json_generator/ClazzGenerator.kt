@@ -53,14 +53,14 @@ class ClazzGenerator(val settings: Settings?) {
 
 
         // comments
-        if (settings?.generateComments == true) {
-            clazz.children?.map {
-                "/// ${it.getComment()}\n"
-            }?.forEach {
-                sb.append(it)
-            }
-            sb.append("\n")
-        }
+//        if (settings?.generateComments == true) {
+//            clazz.children?.map {
+//                "// ${it.getComment()}\n"
+//            }?.forEach {
+//                sb.append(it)
+//            }
+//            sb.append("\n")
+//        }
 
         // class
         sb.append("@freezed\n")

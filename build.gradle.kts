@@ -9,7 +9,7 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.4.32"
+    id("org.jetbrains.kotlin.jvm") version "1.6.21"
     // gradle-intellij-plugin - read more: https://github.com/JetBrains/gradle-intellij-plugin
     id("org.jetbrains.intellij") version "0.7.3"
     // gradle-changelog-plugin - read more: https://github.com/JetBrains/gradle-changelog-plugin
@@ -32,6 +32,8 @@ dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0")
     testImplementation(platform("org.junit:junit-bom:5.9.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4")
 }
 
 // Configure gradle-intellij-plugin plugin.
@@ -69,6 +71,7 @@ tasks {
     }
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.apiVersion = "1.6"
     }
 
     withType<Detekt> {
