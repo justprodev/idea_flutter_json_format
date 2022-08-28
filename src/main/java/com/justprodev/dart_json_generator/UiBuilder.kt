@@ -1,4 +1,4 @@
-package com.zll.format
+package com.justprodev.dart_json_generator
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
@@ -27,7 +27,6 @@ class UiBuilder(private val project: Project, private val virtualFile: VirtualFi
         }
         val tipLabel = JLabel("class name: $className")
         val commentCb = JCheckBox("generate comments", settings.generateComments)
-        val clearNulls = JCheckBox("clear nulls while deserialize", settings.clearNulls)
 
         layout = BorderLayout()
 
@@ -50,13 +49,11 @@ class UiBuilder(private val project: Project, private val virtualFile: VirtualFi
             // down
             layout = FlowLayout()
             add(commentCb)
-            add(clearNulls)
             add(JButton("ok").apply {
                 isVisible = true
                 addActionListener {
                     // 保存配置
                     settings.generateComments = commentCb.isSelected
-                    settings.clearNulls = clearNulls.isSelected
                     settings.save()
 
                     // 开始生成代码

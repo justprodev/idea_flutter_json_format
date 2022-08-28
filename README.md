@@ -1,357 +1,229 @@
-Forked from original plugin "flutter_json_format" added nullsafety variant of a generated files.
+Generating [freezed](https://pub.dev/packages/freezed) models
+with [json_serializable](https://pub.dev/packages/freezed#fromjsontojson) support
+from JSON examples.
 
-Original README below:
-
-### Update
-#### ver 2.1
-
-generate 『toJson』 function to support converting object to map
-
+JSON:
 ```json
 {
-  "name": "zll",
-  "age": 29,
-  "star": 4.5,
-  "married": true
-}
-```
-
-```dart
-class Test {
-  String name;
-  int age;
-  double star;
-  bool married;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.name = map['name'];
-    testBean.age = map['age'];
-    testBean.star = map['star'];
-    testBean.married = map['married'];
-    return testBean;
-  }
-
-  Map toJson() => {
-    "name": name,
-    "age": age,
-    "star": star,
-    "married": married,
-  };
-}
-```
-
-```dart
-import 'dart:convert'
-
-var json = JsonEncoder().convert(obj);
-```
-
-### Install
-#### 1. Download jar
-https://plugins.jetbrains.com/plugin/11551-dart-json-format
-
-#### 2. Search in IDE
-
-Plugins -> Browse repositories -> input "dart_json_format"
-
-### Generate
-
-![gif](example_image/jsonformat.gif)
-
-### Examples
-
-#### 1. Simple data
-
-```json
-{
-  "name": "zll",
-  "age": 29,
-  "star": 4.5,
-  "married": true
-}
-```
-
-```dart
-class Test {
-  String name;
-  int age;
-  double star;
-  bool married;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.name = map['name'];
-    testBean.age = map['age'];
-    testBean.star = map['star'];
-    testBean.married = map['married'];
-    return testBean;
-  }
-}
-```
-
-#### 2. Ojbect
-
-```json
-{
-  "programmer": {
-    "name": "zll",
-    "age": 29,
-    "star": 4.5,
-    "married": true
-  }
-}
-```
-
-```dart
-class Test {
-  ProgrammerBean programmer;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.programmer = ProgrammerBean.fromMap(map['programmer']);
-    return testBean;
-  }
-}
-
-class ProgrammerBean {
-  String name;
-  int age;
-  double star;
-  bool married;
-
-  static ProgrammerBean fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    ProgrammerBean programmerBean = ProgrammerBean();
-    programmerBean.name = map['name'];
-    programmerBean.age = map['age'];
-    programmerBean.star = map['star'];
-    programmerBean.married = map['married'];
-    return programmerBean;
-  }
-}
-```
-
-#### 3. Array
-
-```json
-{
-  "names": ["zll", "kfc"],
-  "ages": [29, 25],
-  "stars": [4.5, 4.4],
-  "marrieds": [true, false]
-}
-```
-
-```dart
-class Test {
-  List<String> names;
-  List<int> ages;
-  List<double> stars;
-  List<bool> marrieds;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.names = []..addAll(
-      (map['names'] as List ?? []).map((o) => o.toString())
-    );
-    testBean.ages = []..addAll(
-      (map['ages'] as List ?? []).map((o) => int.tryParse(o.toString()))
-    );
-    testBean.stars = []..addAll(
-      (map['stars'] as List ?? []).map((o) => double.tryParse(o.toString()))
-    );
-    testBean.marrieds = []..addAll(
-      (map['marrieds'] as List ?? []).map((o) => o.toString() == 'true')
-    );
-    return testBean;
-  }
-}
-```
-
-#### 4. Array of Object
-```json
-{
-  "programmers": [
-    {
-      "name": "zll",
-      "age": 29,
-      "star": 4.5,
-      "married": true
-    },{
-      "name": "kfc",
-      "age": 25,
-      "star": 4.1,
-      "married": false
+  "code": "2000",
+  "data": {
+    "test_field": "aaa",
+    "facetofaceAddress": {
+      "address": "",
+      "receiver": "罗",
+      "receiverCellphone": "1388345****",
+      "sid": "001190e19e754001b53701d0aa81bfe0",
+      "sortNumber": 1,
+      "title": "女士",
+      "type": "FACETOFACE",
+      "userSid": "a19cf6e3586143d283dd4128c456bfaf"
+    },
+    "order": {
+      "bidding": 2300,
+      "brokerAvatar": "broker/getAvatar?key=avatar/b82378ccaccb403c9d8420274372c904",
+      "brokerCellphone": "1347282****",
+      "brokerDealNum": 15,
+      "brokerName": "王**",
+      "brokerSid": "b82378ccaccb403c9d8420274372c904",
+      "brokerStars": 4.5,
+      "code": "1512151307270113",
+      "cover": "show/getPoster?key=52f30bbce4ef4122919cbc95c2f01c36/52f30bbce4ef4122919cbc95c2f01c36",
+      "createdDatetime": "2015-12-15 13:07:28",
+      "deliveryAddressSid": "c25c1954ca204dee8fc18f51bcc71a3e",
+      "deliveryFee": 0,
+      "evaluateStarts": 0,
+      "isDelete": false,
+      "isSequential": false,
+      "orderStatus": "CLOSED",
+      "orderStatusArray": [{
+        "operateDatetime": "2015-12-15 13:07:28",
+        "operateUserSid": "b82378ccaccb403c9d8420274372c904",
+        "operateUsername": "王**",
+        "orderSid": "21bc3cc65e9e47af952c1f4f1f0fd85a",
+        "orderType": "1",
+        "sid": "04940ed81540466ea4408f79989a5d54",
+        "state": "TAKING"
+      }],
+      "orderStatusDesp": "",
+      "orderType": "1",
+      "payType": "",
+      "postTicketSid": "65cc6d54300349e984134ecd0faf3ede",
+      "receiveDatetime": "2015-12-15 13:07:28",
+      "receiver": "张**",
+      "receiverAddress": "控江路1209",
+      "receiverCellphone": "1502379****",
+      "receiverTitle": "先生",
+      "remark": "",
+      "requestDatetime": "2015-12-15 13:07:28",
+      "showName": "Love Radio 品冠 现在你在哪里 巡回演唱会上海站",
+      "showSchedule": "2016-01-09 19:30:00",
+      "showScheduleSid": "eecfd0657fb445a7a36abedc9b621c89",
+      "showSid": "52f30bbce4ef4122919cbc95c2f01c36",
+      "sid": "21bc3cc65e9e47af952c1f4f1f0fd85a",
+      "stateDesp": "已关闭",
+      "ticketPrice": 88000,
+      "ticketQuantity": 1,
+      "ticketSid": "c4583aa8a79a478e8e5cd14691028430",
+      "totalPrice": 2300,
+      "tradeType": "EXPRESS",
+      "userCellphone": "1502379****",
+      "userLeaveMessage": "",
+      "userSid": "a19cf6e3586143d283dd4128c456bfaf",
+      "venueAddress": "上海市长宁区武夷路777号",
+      "venueName": "上海国际体操中心"
     }
-  ]
-}
-```
-
-```dart
-class Test {
-  List<ProgrammersBean> programmers;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.programmers = []..addAll(
-      (map['programmers'] as List ?? []).map((o) => ProgrammersBean.fromMap(o))
-    );
-    return testBean;
-  }
-}
-
-class ProgrammersBean {
-  String name;
-  int age;
-  double star;
-  bool married;
-
-  static ProgrammersBean fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    ProgrammersBean programmersBean = ProgrammersBean();
-    programmersBean.name = map['name'];
-    programmersBean.age = map['age'];
-    programmersBean.star = map['star'];
-    programmersBean.married = map['married'];
-    return programmersBean;
-  }
-}
-```
-
-#### 5. Nested Array
-```json
-{
-  "something": [[[[[1]]]]]
-}
-```
-
-```dart
-class Test {
-  List<List<List<List<List<int>>>>> something;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.something = []..addAll(
-      (map['something'] as List ?? []).map((o) => []..addAll((o as List ?? []).map((oo) => []..addAll((oo as List ?? []).map((ooo) => []..addAll((ooo as List ?? []).map((oooo) => []..addAll((oooo as List ?? []).map((ooooo) => int.tryParse(ooooo.toString()))))))))))
-    );
-    return testBean;
-  }
-}
-```
-
-#### 5. Nested Array of Object
-```json
-{
-  "something": [[[[[{
-    "name": "zll",
-    "age": 29,
-    "star": 4.5,
-    "married": true
-  }]]]]]
-}
-```
-
-```dart
-class Test {
-  List<List<List<List<List<SomethingBean>>>>> something;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.something = []..addAll(
-      (map['something'] as List ?? []).map((o) => []..addAll((o as List ?? []).map((oo) => []..addAll((oo as List ?? []).map((ooo) => []..addAll((ooo as List ?? []).map((oooo) => []..addAll((oooo as List ?? []).map((ooooo) => SomethingBean.fromMap(ooooo))))))))))
-    );
-    return testBean;
-  }
-}
-
-class SomethingBean {
-  String name;
-  int age;
-  double star;
-  bool married;
-
-  static SomethingBean fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    SomethingBean somethingBean = SomethingBean();
-    somethingBean.name = map['name'];
-    somethingBean.age = map['age'];
-    somethingBean.star = map['star'];
-    somethingBean.married = map['married'];
-    return somethingBean;
-  }
-}
-```
-
-#### 6. Empty or Null
-```json
-{
-  "obj": null,
-  "emptyList": [],
-  "nullList": [null]
-}
-```
-
-```dart
-class Test {
-  dynamic obj;
-  List<dynamic> emptyList;
-  List<dynamic> nullList;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.obj = map['obj'];
-    testBean.emptyList = map['emptyList'];
-    testBean.nullList = map['nullList'];
-    return testBean;
-  }
-}
-```
-
-#### 7. Root Array
-```json
-[
-  {
-    "name": "zll",
-    "age": 29,
-    "star": 4.5,
-    "married": true
   },
-  {
-	"name": "kfc",
-	"age": 25,
-	"star": 4.1,
-	"married": false
-  }
-]
-```
-
-##### Take only array[0] to use
-
-```dart
-class Test {
-  String name;
-  int age;
-  double star;
-  bool married;
-
-  static Test fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    Test testBean = Test();
-    testBean.name = map['name'];
-    testBean.age = map['age'];
-    testBean.star = map['star'];
-    testBean.married = map['married'];
-    return testBean;
-  }
+  "testFromList": [
+    {
+      "testKey" : "testValue"
+    }
+  ],
+  "extraData": {},
+  "message": "",
+  "success": true,
+  "intList": [1, 2, 3],
+  "boolList": [true, false, true, true],
+  "doubleList": [0.0, 1.1, 2.2, 3.3],
+  "emptyList": [],
+  "nullList": [null],
+  "nullObj": null
 }
 ```
+Dart (named **NewModel.dart**):
+```dart
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'NewModel.freezed.dart';
+
+part 'NewModel.g.dart';
+
+@freezed
+class NewModel with _$NewModel {
+  const factory NewModel({
+    @JsonKey(name: 'code') String? code,
+    @JsonKey(name: 'data') DataBean? data,
+    @JsonKey(name: 'testFromList') List<TestFromListBean>? testFromList,
+    @JsonKey(name: 'extraData') ExtraDataBean? extraData,
+    @JsonKey(name: 'message') String? message,
+    @JsonKey(name: 'success') bool? success,
+    @JsonKey(name: 'intList') List<int>? intList,
+    @JsonKey(name: 'boolList') List<bool>? boolList,
+    @JsonKey(name: 'doubleList') List<double>? doubleList,
+    @JsonKey(name: 'emptyList') List<dynamic>? emptyList,
+    @JsonKey(name: 'nullList') List<dynamic>? nullList,
+    @JsonKey(name: 'nullObj') dynamic? nullObj,
+  }) = _NewModel;
+
+  factory NewModel.fromJson(Map<String, Object?> json) => _$NewModelFromJson(json);
+}
+
+@freezed
+class ExtraDataBean with _$ExtraDataBean {
+  const factory ExtraDataBean() = _ExtraDataBean;
+
+  factory ExtraDataBean.fromJson(Map<String, Object?> json) => _$ExtraDataBeanFromJson(json);
+}
+
+@freezed
+class TestFromListBean with _$TestFromListBean {
+  const factory TestFromListBean({
+    @JsonKey(name: 'testKey') String? testKey,
+  }) = _TestFromListBean;
+
+  factory TestFromListBean.fromJson(Map<String, Object?> json) => _$TestFromListBeanFromJson(json);
+}
+
+@freezed
+class DataBean with _$DataBean {
+  const factory DataBean({
+    @JsonKey(name: 'test_field') String? testField,
+    @JsonKey(name: 'facetofaceAddress') FacetofaceAddressBean? facetofaceAddress,
+    @JsonKey(name: 'order') OrderBean? order,
+  }) = _DataBean;
+
+  factory DataBean.fromJson(Map<String, Object?> json) => _$DataBeanFromJson(json);
+}
+
+@freezed
+class OrderBean with _$OrderBean {
+  const factory OrderBean({
+    @JsonKey(name: 'bidding') int? bidding,
+    @JsonKey(name: 'brokerAvatar') String? brokerAvatar,
+    @JsonKey(name: 'brokerCellphone') String? brokerCellphone,
+    @JsonKey(name: 'brokerDealNum') int? brokerDealNum,
+    @JsonKey(name: 'brokerName') String? brokerName,
+    @JsonKey(name: 'brokerSid') String? brokerSid,
+    @JsonKey(name: 'brokerStars') double? brokerStars,
+    @JsonKey(name: 'code') String? code,
+    @JsonKey(name: 'cover') String? cover,
+    @JsonKey(name: 'createdDatetime') String? createdDatetime,
+    @JsonKey(name: 'deliveryAddressSid') String? deliveryAddressSid,
+    @JsonKey(name: 'deliveryFee') int? deliveryFee,
+    @JsonKey(name: 'evaluateStarts') int? evaluateStarts,
+    @JsonKey(name: 'isDelete') bool? isDelete,
+    @JsonKey(name: 'isSequential') bool? isSequential,
+    @JsonKey(name: 'orderStatus') String? orderStatus,
+    @JsonKey(name: 'orderStatusArray') List<OrderStatusArrayBean>? orderStatusArray,
+    @JsonKey(name: 'orderStatusDesp') String? orderStatusDesp,
+    @JsonKey(name: 'orderType') String? orderType,
+    @JsonKey(name: 'payType') String? payType,
+    @JsonKey(name: 'postTicketSid') String? postTicketSid,
+    @JsonKey(name: 'receiveDatetime') String? receiveDatetime,
+    @JsonKey(name: 'receiver') String? receiver,
+    @JsonKey(name: 'receiverAddress') String? receiverAddress,
+    @JsonKey(name: 'receiverCellphone') String? receiverCellphone,
+    @JsonKey(name: 'receiverTitle') String? receiverTitle,
+    @JsonKey(name: 'remark') String? remark,
+    @JsonKey(name: 'requestDatetime') String? requestDatetime,
+    @JsonKey(name: 'showName') String? showName,
+    @JsonKey(name: 'showSchedule') String? showSchedule,
+    @JsonKey(name: 'showScheduleSid') String? showScheduleSid,
+    @JsonKey(name: 'showSid') String? showSid,
+    @JsonKey(name: 'sid') String? sid,
+    @JsonKey(name: 'stateDesp') String? stateDesp,
+    @JsonKey(name: 'ticketPrice') int? ticketPrice,
+    @JsonKey(name: 'ticketQuantity') int? ticketQuantity,
+    @JsonKey(name: 'ticketSid') String? ticketSid,
+    @JsonKey(name: 'totalPrice') int? totalPrice,
+    @JsonKey(name: 'tradeType') String? tradeType,
+    @JsonKey(name: 'userCellphone') String? userCellphone,
+    @JsonKey(name: 'userLeaveMessage') String? userLeaveMessage,
+    @JsonKey(name: 'userSid') String? userSid,
+    @JsonKey(name: 'venueAddress') String? venueAddress,
+    @JsonKey(name: 'venueName') String? venueName,
+  }) = _OrderBean;
+
+  factory OrderBean.fromJson(Map<String, Object?> json) => _$OrderBeanFromJson(json);
+}
+
+@freezed
+class OrderStatusArrayBean with _$OrderStatusArrayBean {
+  const factory OrderStatusArrayBean({
+    @JsonKey(name: 'operateDatetime') String? operateDatetime,
+    @JsonKey(name: 'operateUserSid') String? operateUserSid,
+    @JsonKey(name: 'operateUsername') String? operateUsername,
+    @JsonKey(name: 'orderSid') String? orderSid,
+    @JsonKey(name: 'orderType') String? orderType,
+    @JsonKey(name: 'sid') String? sid,
+    @JsonKey(name: 'state') String? state,
+  }) = _OrderStatusArrayBean;
+
+  factory OrderStatusArrayBean.fromJson(Map<String, Object?> json) => _$OrderStatusArrayBeanFromJson(json);
+}
+
+@freezed
+class FacetofaceAddressBean with _$FacetofaceAddressBean {
+  const factory FacetofaceAddressBean({
+    @JsonKey(name: 'address') String? address,
+    @JsonKey(name: 'receiver') String? receiver,
+    @JsonKey(name: 'receiverCellphone') String? receiverCellphone,
+    @JsonKey(name: 'sid') String? sid,
+    @JsonKey(name: 'sortNumber') int? sortNumber,
+    @JsonKey(name: 'title') String? title,
+    @JsonKey(name: 'type') String? type,
+    @JsonKey(name: 'userSid') String? userSid,
+  }) = _FacetofaceAddressBean;
+
+  factory FacetofaceAddressBean.fromJson(Map<String, Object?> json) => _$FacetofaceAddressBeanFromJson(json);
+}
+```

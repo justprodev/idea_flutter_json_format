@@ -1,4 +1,4 @@
-package com.zll.format;
+package com.justprodev.dart_json_generator;
 
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
@@ -13,15 +13,6 @@ import java.io.IOException;
  * Created by zhangll on 2018/8/3.
  */
 public class Util {
-    /**
-     * 将字符串复制到剪切板。
-     */
-    public static void setSysClipboardText(String writeMe) {
-        Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
-        Transferable tText = new StringSelection(writeMe);
-        clip.setContents(tText, null);
-    }
-
     // 首字母转大写
     public static String toUpperCaseFirstOne(String s) {
         if (s.isEmpty()) return s;

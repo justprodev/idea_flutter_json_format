@@ -1,4 +1,4 @@
-package com.zll.format
+package com.justprodev.dart_json_generator
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -59,7 +59,7 @@ abstract class Clazz(
         private fun Any.isBoolean() = toString().let { it == "true" || it == "false" }
     }
 
-    fun getStatement() = "final ${getClassName()}? ${getCamelName()};"
+    fun getStatement() = "${getClassName()}? ${getCamelName()}"
     fun getFieldName() = Util.toLowerCaseFirstOne(getClassName())
     fun getCamelName() = name.split("_").reduce { acc, s -> "$acc${Util.toUpperCaseFirstOne(s)}" }
     fun getComment() = "$name : ${content.toString().replace("\n", "")}"

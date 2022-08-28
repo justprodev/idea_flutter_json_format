@@ -1,4 +1,4 @@
-package com.zll.format
+package com.justprodev.dart_json_generator
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
