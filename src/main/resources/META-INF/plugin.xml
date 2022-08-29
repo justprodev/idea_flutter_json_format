@@ -4,9 +4,9 @@
   <vendor email="dart@justprodev.com" url="https://github.com/justprodev">ay</vendor>
 
   <description>
-    To generating dart model for serializing/deserializing JSON, based on JSON example.
-    Generates simple objects - just serializing/deserializing and no more.
-    Checking while generating models.
+    Generating [freezed](https://pub.dev/packages/freezed) models
+    with [json_serializable](https://pub.dev/packages/freezed#fromjsontojson) support
+    from JSON examples.
   </description>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
