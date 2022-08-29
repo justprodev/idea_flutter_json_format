@@ -1,7 +1,9 @@
-package com.justprodev.dart_json_generator
+package com.justprodev.dart_json_generator.generator
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.justprodev.dart_json_generator.utils.toLowerCaseFirstOne
+import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
 
 abstract class Clazz(
     open val root: MutableList<Clazz>,
@@ -60,8 +62,8 @@ abstract class Clazz(
     }
 
     fun getStatement() = "${getClassName()}? ${getCamelName()}"
-    fun getFieldName() = Util.toLowerCaseFirstOne(getClassName())
-    fun getCamelName() = name.split("_").reduce { acc, s -> "$acc${Util.toUpperCaseFirstOne(s)}" }
+    fun getFieldName() = getClassName().toLowerCaseFirstOne()
+    fun getCamelName() = name.split("_").reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
     fun getComment() = "$name : ${content.toString().replace("\n", "")}"
     fun getJsonAssignment() = "\"$name\": ${toJson()}"
 
@@ -115,7 +117,7 @@ data class ObjectClazz(
         root.add(this)
     }
 
-    override fun getClassName() = "${Util.toUpperCaseFirstOne(name)}Bean"
+    override fun getClassName() = "${name.toUpperCaseFirstOne()}Bean"
     override fun getAssignments(parent: String) = listOf("map['$name']!=null ? ${getClassName()}.fromMap(map['$name']) : null,")
     override fun map(obj: String): String {
         return "${getClassName()}.fromMap($obj)"

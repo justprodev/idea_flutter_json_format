@@ -1,10 +1,12 @@
-package com.justprodev.dart_json_generator
+package com.justprodev.dart_json_generator.generator
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.JsonParser
 import com.intellij.util.containers.isNullOrEmpty
+import com.justprodev.dart_json_generator.utils.Settings
+import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
 import java.lang.IllegalStateException
 
 class ClazzGenerator(val settings: Settings?) {
@@ -49,7 +51,10 @@ class ClazzGenerator(val settings: Settings?) {
     private fun printClazz(keepName: Boolean, clazz: Clazz): String {
         val sb = StringBuilder()
 
-        val className = Util.toUpperCaseFirstOne((if (keepName) clazz.name else clazz.getClassName()))
+        val className = if (keepName)
+            clazz.name.toUpperCaseFirstOne()
+        else
+            clazz.getClassName().toUpperCaseFirstOne()
 
 
         // comments

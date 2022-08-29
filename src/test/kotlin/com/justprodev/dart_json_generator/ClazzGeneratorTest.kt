@@ -1,5 +1,6 @@
 package com.justprodev.dart_json_generator
 
+import com.justprodev.dart_json_generator.generator.ClazzGenerator
 import java.io.BufferedReader
 import java.io.DataInputStream
 import java.io.File
