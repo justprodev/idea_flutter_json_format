@@ -25,7 +25,7 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="DartJsonGenerator" class="com.justprodev.dart_json_generator.DartJsonFormatAction" text="DartJsonGenerator">
+    <action id="DartJsonGenerator" class="com.justprodev.dart_json_generator.DartJsonFormatAction" text="Create Dart Class from JSON">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="meta N"/>
     </action>
