@@ -1,8 +1,6 @@
-<!-- Keep a Changelog guide -> https://keepachangelog.com -->
+# Change Log
 
-# Flutter Json Format New Generation
-
-## [4.0.0]
+## [4.0.1]
 
 Breaking changes.
 
@@ -13,12 +11,16 @@ from JSON examples.
 Advantages: Easy to modify models according to changes on backend.
 Disadvantages: Need to add a code generation to the project (see 'dart/pubspec.yaml' and [freezed](https://pub.dev/packages/freezed) docs)
 
-**But a modern project using flutter/dart should have code generation.**
+**Enhancement**
 
-## [3.0.4]
+- New UI
+- Added ability to generate classes from the "New" menu
+- Validating JSON
+- Formatting JSON
+
+## [3.1.3]
 - Deserialized model - result of Model.fromMap() -  can be null, especially for recursive cases.
 
-## [3.0.4]
 ### Added
 - Null safety variant of generated files
 
