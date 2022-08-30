@@ -1,6 +1,16 @@
-Generating [freezed](https://pub.dev/packages/freezed) models
-with [json_serializable](https://pub.dev/packages/freezed#fromjsontojson) support
-from JSON examples.
+### Generating [freezed](https://pub.dev/packages/freezed) models with [json_serializable](https://pub.dev/packages/freezed#fromjsontojson) support from JSON examples.
+
+Generating from the *New* menu:
+
+![new](/screenshots/new.png)
+
+Generating from the *Generate* menu:
+
+![new](/screenshots/generate.png)
+
+Generating dialog:
+
+![new](/screenshots/dialog.png)
 
 JSON:
 ```json
@@ -89,13 +99,12 @@ JSON:
   "nullObj": null
 }
 ```
-Dart (named **NewModel.dart**):
+Dart (named **new_model.dart**):
 ```dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'NewModel.freezed.dart';
-
-part 'NewModel.g.dart';
+part 'new_model.freezed.dart';
+part 'new_model.g.dart';
 
 @freezed
 class NewModel with _$NewModel {
