@@ -11,8 +11,8 @@ import java.lang.IllegalStateException
 
 class ClazzGenerator(val settings: Settings?) {
 
-    fun generate(name: String, string: String) = try {
-        JsonParser().parse(string).let {
+    fun generate(fileName: String, className: String, json: String) = try {
+        JsonParser().parse(json).let {
             when (it) {
                 is JsonObject -> it.asJsonObject
                 is JsonArray -> it.asJsonArray[0].asJsonObject
@@ -20,14 +20,14 @@ class ClazzGenerator(val settings: Settings?) {
             }
         }.let { obj ->
             mutableListOf<Clazz>().let {
-                Clazz(it, name, obj) to it
+                Clazz(it, className, obj) to it
             }
         }.let { (clazz, clazzes) ->
             val sb = StringBuilder()
 
             sb.append("import 'package:freezed_annotation/freezed_annotation.dart';\n\n")
-            sb.append("part '$name.freezed.dart';\n")
-            sb.append("part '$name.g.dart';\n\n")
+            sb.append("part '$fileName.freezed.dart';\n")
+            sb.append("part '$fileName.g.dart';\n\n")
 
             clazzes.reversed().forEach {
                 sb.append(printClazz(it == clazz, it))
@@ -69,7 +69,7 @@ class ClazzGenerator(val settings: Settings?) {
 
         // class
         sb.append("@freezed\n")
-            .append("class $className with _\$$className{\n")
+            .append("class $className with _\$$className {\n")
 
         // constructor
         sb.append("  const factory $className(")

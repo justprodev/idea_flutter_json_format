@@ -9,23 +9,25 @@ import com.intellij.psi.PsiFile
 import com.justprodev.dart_json_generator.generator.ClazzGenerator
 import com.justprodev.dart_json_generator.utils.Settings
 import com.justprodev.dart_json_generator.utils.JSONUtils
+import com.justprodev.dart_json_generator.utils.createFileName
 import java.awt.BorderLayout
-import javax.help.SwingHelpUtilities
 import javax.swing.*
 
 private const val PADDING = 10
 
+class Model(val className: String, val fileName: String)
+
 /**
  * @param project
  * @param input file with JSON
- * @param className proposed classname
+ * @param model proposed className & fileName
  * @param onGenerate user tap generate (dialog will be closed)
  */
 class GeneratorDialog(
     private val project: Project,
     private val input: PsiFile,
-    private val className: String? = null,
-    private val onGenerate: (className: String, generatedCode: String)->Unit
+    private val model: Model? = null,
+    private val onGenerate: (fileName: String, code: String) -> Unit
 ) {
     private val frame: JFrame
     private val validator = JSONUtils()
@@ -49,7 +51,7 @@ class GeneratorDialog(
         }
     }
 
-    private fun prettify(postAction: ()->Unit) {
+    private fun prettify(postAction: () -> Unit) {
         validator.prettify(input.text) { prettyJson ->
             (editor as? TextEditor)?.editor?.let { editor ->
                 SwingUtilities.invokeAndWait {
@@ -63,33 +65,42 @@ class GeneratorDialog(
     private fun placeComponents(panel: JPanel) = panel.apply {
         val settings = Settings()
 
-        lateinit var classNameField : JTextField
+        lateinit var classNameField: JTextField
 
-        val button = JButton("Generate ${className ?: ""}").apply {
+        val button = JButton("Generate ${model?.className ?: ""}").apply {
             isEnabled = false
             addActionListener {
                 //settings.generateComments = commentCb.isSelected
                 settings.save()
 
-                if(classNameField.text.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame,
+                if (classNameField.text.isEmpty()) {
+                    JOptionPane.showMessageDialog(
+                        frame,
                         "Please input class name",
                         "Inane error",
-                        JOptionPane.ERROR_MESSAGE)
+                        JOptionPane.ERROR_MESSAGE
+                    )
                     classNameField.requestFocus()
                     return@addActionListener
                 }
 
-                val code = ClazzGenerator(settings).generate(classNameField.text, input.text)
-                onGenerate(classNameField.text, code)
+                val model = this@GeneratorDialog.model ?: Model(
+                    className = classNameField.text,
+                    fileName = createFileName(classNameField.text)
+                )
+
+                val code = ClazzGenerator(settings).generate(model.fileName, model.className, input.text)
+
+                onGenerate(model.fileName, code)
+
                 frame.dispose()
             }
         }
 
         classNameField = JTextField().apply {
-            text = className ?: ""
-            if(className !=null) isEnabled = false
-            document.addDocumentListener(object : javax.swing.event.DocumentListener{
+            text = model?.className ?: ""
+            if (model != null) isEnabled = false
+            document.addDocumentListener(object : javax.swing.event.DocumentListener {
                 override fun insertUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
                 override fun removeUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
                 override fun changedUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
@@ -122,7 +133,7 @@ class GeneratorDialog(
         }, BorderLayout.SOUTH)
 
         add(JPanel().apply {
-            layout = BorderLayout().apply{
+            layout = BorderLayout().apply {
                 hgap = PADDING
             }
             border = BorderFactory.createEmptyBorder(0, 0, PADDING, 0)
@@ -140,10 +151,10 @@ class GeneratorDialog(
                     formatButton.isEnabled = isValid
 
                     // initial insert
-                    if(event.oldLength == 0) {
+                    if (event.oldLength == 0) {
                         SwingUtilities.invokeLater {
                             prettify {
-                                (editor as? TextEditor)?.editor?.scrollingModel?.scroll(0,0)
+                                (editor as? TextEditor)?.editor?.scrollingModel?.scroll(0, 0)
                             }
                         }
                     }

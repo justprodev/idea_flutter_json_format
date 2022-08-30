@@ -10,6 +10,9 @@ fun String.toLowerCaseFirstOne(): String {
     return if (Character.isLowerCase(this[0])) this else Character.toLowerCase(this[0]) + this.substring(1)
 }
 
+/**
+ * Create valid Dart file name for class (snake_case)
+ */
 fun createFileName(className: String): String {
     var fileName = ""
     var prevChar: Char? = null

@@ -15,6 +15,7 @@ import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiUtilBase
 import com.justprodev.dart_json_generator.ui.GeneratorDialog
+import com.justprodev.dart_json_generator.ui.Model
 import com.justprodev.dart_json_generator.utils.*
 import javax.swing.JFrame
 
@@ -27,7 +28,7 @@ class DartJsonGenerateAction : AnAction() {
             .split("_")
             .reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
 
-        GeneratorDialog(project, input, className) { _, code ->
+        GeneratorDialog(project, input, Model(className, output.name)) { _, code ->
             output.write(project, code)
         }
     }
@@ -51,8 +52,7 @@ class DartJsonNewFileAction : AnAction() {
             }
         } ?: return
 
-        GeneratorDialog(project, input) { className, code ->
-            val fileName = createFileName(className)
+        GeneratorDialog(project, input) { fileName, code ->
             val output = PsiFileFactory.getInstance(project).createFileFromText("${fileName.trim('`')}.dart", DartFileType(), code)
             directory.add(output)
         }

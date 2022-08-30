@@ -10,9 +10,9 @@ internal class ClazzGeneratorTest {
     @org.junit.jupiter.api.Test
     fun generate() {
         val json = File(ClazzGenerator::class.java.getClassLoader().getResource("test.json").toURI()).readText()
-        val model = ClazzGenerator(null).generate("NewModel", json)
+        val model = ClazzGenerator(null).generate("new_model","NewModel", json)
         // write dart
-        File("dart/lib/NewModel.dart").writeText(model)
+        File("dart/lib/new_model.dart").writeText(model)
 
         val proc = ProcessBuilder("test_dart.bat").let {
             it.redirectErrorStream(true)
