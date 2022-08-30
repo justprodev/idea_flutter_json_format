@@ -3,11 +3,19 @@
   <name>DartJsonGenerator</name>
   <vendor email="dart@justprodev.com" url="https://github.com/justprodev">ay</vendor>
 
-  <description>
-    Generating [freezed](https://pub.dev/packages/freezed) models
-    with [json_serializable](https://pub.dev/packages/freezed#fromjsontojson) support
-    from JSON examples.
-  </description>
+  <description><![CDATA[
+<h1>Generating Dart classes from JSON examples.</h1>
+
+<p>Features:</p>
+<ul>
+  <li>Generating <a href="https://pub.dev/packages/freezed" target="_blank" rel="nofollow">freezed</a> models
+  with <a href="https://pub.dev/packages/freezed#fromjsontojson" target="_blank" rel="nofollow">json_serializable</a></li>
+  <li>Generate classes from the "Generate" in empty file</li>
+  <li>Generate classes from the "New" menu to create a new file with Dart classes.</li>
+  <li>Validating JSON</li>
+  <li>Formatting JSON</li>
+</ul>
+]]></description>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="145.0"/>
