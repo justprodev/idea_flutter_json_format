@@ -3,11 +3,19 @@
   <name>DartJsonGenerator</name>
   <vendor email="dart@justprodev.com" url="https://github.com/justprodev">ay</vendor>
 
-  <description>
-    To generating dart model for serializing/deserializing JSON, based on JSON example.
-    Generates simple objects - just serializing/deserializing and no more.
-    Checking while generating models.
-  </description>
+  <description><![CDATA[
+<h1>Generating Dart classes from JSON examples.</h1>
+
+<p>Features:</p>
+<ul>
+  <li>Generating <a href="https://pub.dev/packages/freezed" target="_blank" rel="nofollow">freezed</a> models
+  with <a href="https://pub.dev/packages/freezed#fromjsontojson" target="_blank" rel="nofollow">json_serializable</a></li>
+  <li>Generate classes from the "Generate" in empty file</li>
+  <li>Generate classes from the "New" menu to create a new file with Dart classes.</li>
+  <li>Validating JSON</li>
+  <li>Formatting JSON</li>
+</ul>
+]]></description>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="145.0"/>
@@ -25,9 +33,17 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="DartJsonGenerator" class="com.zll.format.DartJsonFormatAction" text="DartJsonGenerator">
+    <action id="com.justprodev.dart_json_generator.DartJsonGenerateAction" class="com.justprodev.dart_json_generator.DartJsonGenerateAction" text="Dart Class from JSON">
       <add-to-group group-id="GenerateGroup" anchor="first"/>
       <keyboard-shortcut keymap="$default" first-keystroke="meta N"/>
+    </action>
+
+    <action id="DartJsonGenerator"
+            class="com.justprodev.dart_json_generator.DartJsonNewFileAction"
+            text="Dart Class from JSON"
+            icon="/META-INF/pluginIcon.svg">
+      <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+
     </action>
   </actions>
 

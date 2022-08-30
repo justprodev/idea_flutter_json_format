@@ -1,11 +1,19 @@
-<!-- Keep a Changelog guide -> https://keepachangelog.com -->
+# Change Log
 
-# Flutter Json Format New Generation
+## [4.0.1]
 
-## [3.0.4]
+**Enhancement**
+
+- Generating [freezed](https://pub.dev/packages/freezed) models
+  with [json_serializable](https://pub.dev/packages/freezed#fromjsontojson) (breaking change)
+- New UI
+- Added ability to generate classes from the "New" menu
+- Validating JSON
+- Formatting JSON
+
+## [3.1.3]
 - Deserialized model - result of Model.fromMap() -  can be null, especially for recursive cases.
 
-## [3.0.4]
 ### Added
 - Null safety variant of generated files
 

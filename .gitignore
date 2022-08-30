@@ -28,3 +28,12 @@ hs_err_pid*
 /test/.packages
 /test/.dart_tool/package_config.json
 /test/pubspec.lock
+*.freezed.dart
+*.g.dart
+NewModel.dart
+.dart_tool/
+.packages
+pubspec.lock
+
+
+/dart/lib/new_model.dart
