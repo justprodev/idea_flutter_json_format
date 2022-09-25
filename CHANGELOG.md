@@ -1,5 +1,11 @@
 # Change Log
 
+## [4.0.3]
+
+**BugFix**
+
+- removed auto-format when copy&paste (now is buggy, will be implemented later); show dialog relative to ide window
+
 ## [4.0.1]
 
 **Enhancement**
