@@ -35,11 +35,12 @@ class GeneratorDialog(
 
     init {
         frame = JFrame("Create dart model class for serializing/deserializing JSON").apply {
-            setSize(700, 520)
+            val root = FocusManager.getCurrentManager().activeWindow
+            setSize(root?.let{ (it.width*0.65).toInt() } ?: 700, root?.let{ (it.height*0.65).toInt() } ?: 520)
             defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
             add(build())
             isVisible = true
-            setLocationRelativeTo(null)
+            setLocationRelativeTo(root)
         }
     }
 
@@ -145,19 +146,10 @@ class GeneratorDialog(
             override fun beforeDocumentChange(event: DocumentEvent) = Unit
 
             override fun documentChanged(event: DocumentEvent) {
-                val json = event.document.text ?: return
+                val json = event.document.text
                 validator.validate(json) { isValid ->
                     button.isEnabled = isValid
                     formatButton.isEnabled = isValid
-
-                    // initial insert
-                    if (event.oldLength == 0) {
-                        SwingUtilities.invokeLater {
-                            prettify {
-                                (editor as? TextEditor)?.editor?.scrollingModel?.scroll(0, 0)
-                            }
-                        }
-                    }
                 }
             }
         })
