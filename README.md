@@ -1,3 +1,6 @@
+[![Version](https://img.shields.io/jetbrains/plugin/v/16971-dartjsongenerator.svg)](https://plugins.jetbrains.com/plugin/16971-dartjsongenerator)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/16971-dartjsongenerator.svg)](https://plugins.jetbrains.com/plugin/16971-dartjsongenerator)
+
 ### Generating [freezed](https://pub.dev/packages/freezed) models with [json_serializable](https://pub.dev/packages/freezed#fromjsontojson) support from JSON examples.
 
 Generating from the *New* menu:
