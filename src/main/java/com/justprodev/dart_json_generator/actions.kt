@@ -28,7 +28,7 @@ class DartJsonGenerateAction : AnAction() {
             .split("_")
             .reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
 
-        GeneratorDialog(project, input, Model(className, output.name)) { _, code ->
+        GeneratorDialog(project, input, Model(className, output.nameWithoutExtension)) { _, code ->
             output.write(project, code)
         }
     }

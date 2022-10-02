@@ -1,5 +1,11 @@
 # Change Log
 
+## [4.0.4]
+
+**BugFix**
+
+- fixed a parts section when generating code from "Generate" dialog
+
 ## [4.0.3]
 
 **BugFix**
