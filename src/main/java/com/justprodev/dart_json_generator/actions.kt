@@ -6,9 +6,11 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.LangDataKeys
 import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ModuleRootManager
+import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiFileFactory
@@ -17,6 +19,7 @@ import com.intellij.psi.util.PsiUtilBase
 import com.justprodev.dart_json_generator.ui.GeneratorDialog
 import com.justprodev.dart_json_generator.ui.Model
 import com.justprodev.dart_json_generator.utils.*
+import java.io.IOException
 import javax.swing.JFrame
 
 class DartJsonGenerateAction : AnAction() {
@@ -53,8 +56,11 @@ class DartJsonNewFileAction : AnAction() {
         } ?: return
 
         GeneratorDialog(project, input) { fileName, code ->
-            val output = PsiFileFactory.getInstance(project).createFileFromText("${fileName.trim('`')}.dart", DartFileType(), code)
-            directory.add(output)
+            val runnable = Runnable {
+                val output = PsiFileFactory.getInstance(project).createFileFromText("${fileName.trim('`')}.dart", DartFileType(), code)
+                directory.add(output)
+            }
+            WriteCommandAction.runWriteCommandAction(project, runnable)
         }
     }
 }
