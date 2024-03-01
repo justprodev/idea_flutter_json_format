@@ -1,5 +1,11 @@
 # Change Log
 
+## [4.0.5]
+
+**BugFix**
+
+- fixed old bug with writing file which become critical in 2023.3
+
 ## [4.0.4]
 
 **BugFix**
