@@ -5,6 +5,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.JsonParser
 import com.intellij.util.containers.isNullOrEmpty
+import com.justprodev.dart_json_generator.utils.JSONUtils
 import com.justprodev.dart_json_generator.utils.Settings
 import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
 import java.lang.IllegalStateException
@@ -12,7 +13,7 @@ import java.lang.IllegalStateException
 class ClazzGenerator(val settings: Settings?) {
 
     fun generate(fileName: String, className: String, json: String) = try {
-        JsonParser().parse(json).let {
+        JSONUtils.parse(json).let {
             when (it) {
                 is JsonObject -> it.asJsonObject
                 is JsonArray -> it.asJsonArray[0].asJsonObject
@@ -73,7 +74,7 @@ class ClazzGenerator(val settings: Settings?) {
 
         // constructor
         sb.append("  const factory $className(")
-        if (!clazz.children.isNullOrEmpty()) {
+        if (clazz.children != null && clazz.children!!.isNotEmpty()) {
             sb.append("{")
             clazz.children!!.map {
                 "\n    @JsonKey(name: '${it.name}') ${it.getStatement()},"

@@ -5,6 +5,7 @@
 **BugFix**
 
 - fixed old bug with writing file which become critical in 2023.3
+- fixed formatting
 
 ## [4.0.4]
 
