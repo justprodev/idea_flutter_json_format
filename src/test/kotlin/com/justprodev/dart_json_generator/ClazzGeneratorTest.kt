@@ -10,7 +10,7 @@ const val testModelName = "NewModel"
 const val testModelFileName = "new_model"
 
 const val dartDirPath = "dart"
-const val dartTestScriptPath = ".test_dart.sh"
+const val dartTestScriptPathPrefix = ".test_dart"
 const val dartTestScript = """
 cd $dartDirPath || exit 1
 dart pub get
@@ -32,12 +32,25 @@ class ClazzGeneratorTest {
         File("$dartDirPath/lib/model").deleteRecursively()
         File("$dartDirPath/lib/model").mkdirs()
         File("$dartDirPath/lib/model/$testModelFileName.dart").writeText(model)
-        File(dartTestScriptPath).writeText(dartTestScript)
 
-        val proc = ProcessBuilder("sh", dartTestScriptPath).let {
-            it.redirectErrorStream(true)
-            it.start()
+        val procBuilder: ProcessBuilder
+        val dartScriptFileName: String
+
+        if (System.getProperty("os.name").contains("Windows", ignoreCase = true)) {
+            dartScriptFileName = "$dartTestScriptPathPrefix.bat"
+            procBuilder = ProcessBuilder("cmd", "/c", dartScriptFileName)
+        } else {
+            dartScriptFileName = "$dartTestScriptPathPrefix.sh"
+            procBuilder = ProcessBuilder("sh", dartScriptFileName)
         }
+
+        File(dartScriptFileName).writeText(dartTestScript)
+
+        val proc = with(procBuilder) {
+            redirectErrorStream(true)
+            start()
+        }
+
         val out = BufferedReader(InputStreamReader(DataInputStream(proc.inputStream)))
         var s: String?
 
@@ -45,7 +58,7 @@ class ClazzGeneratorTest {
             s = out.readLine()?.also { println(it) }
         } while (s != null)
 
-        File(dartTestScriptPath).delete()
+        File(dartScriptFileName).delete()
 
         return proc.waitFor() == 0
     }
