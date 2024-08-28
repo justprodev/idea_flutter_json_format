@@ -6,15 +6,35 @@ import java.io.DataInputStream
 import java.io.File
 import java.io.InputStreamReader
 
-internal class ClazzGeneratorTest {
+const val testModelName = "NewModel"
+const val testModelFileName = "new_model"
+
+const val dartDirPath = "dart"
+const val dartTestScriptPath = ".test_dart.sh"
+const val dartTestScript = """
+cd $dartDirPath || exit 1
+dart pub get
+dart run build_runner build --delete-conflicting-outputs
+dart lib/main.dart
+"""
+
+
+class ClazzGeneratorTest {
     @org.junit.jupiter.api.Test
     fun generate() {
-        val json = File(ClazzGenerator::class.java.getClassLoader().getResource("test.json").toURI()).readText()
-        val model = ClazzGenerator(null).generate("new_model","NewModel", json)
-        // write dart
-        File("dart/lib/new_model.dart").writeText(model)
+        val json = File(ClazzGenerator::class.java.classLoader.getResource("test.json")!!.toURI()).readText()
+        val model = ClazzGenerator(null).generate(testModelFileName, testModelName, json)
 
-        val proc = ProcessBuilder("test_dart.bat").let {
+        assert(testDartModel(model)) { "Dart tests not passed" }
+    }
+
+    private fun testDartModel(model: String): Boolean {
+        File("$dartDirPath/lib/model").deleteRecursively()
+        File("$dartDirPath/lib/model").mkdirs()
+        File("$dartDirPath/lib/model/$testModelFileName.dart").writeText(model)
+        File(dartTestScriptPath).writeText(dartTestScript)
+
+        val proc = ProcessBuilder("sh", dartTestScriptPath).let {
             it.redirectErrorStream(true)
             it.start()
         }
@@ -23,8 +43,10 @@ internal class ClazzGeneratorTest {
 
         do {
             s = out.readLine()?.also { println(it) }
-        } while(s != null)
+        } while (s != null)
 
-        assert(proc.waitFor() == 0, {"Dart tests not passed"})
+        File(dartTestScriptPath).delete()
+
+        return proc.waitFor() == 0
     }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:test/test.dart';
-import 'new_model.dart';
+import 'model/new_model.dart';
 
 void main() {
   group('json', () {
