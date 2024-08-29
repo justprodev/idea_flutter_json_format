@@ -11,7 +11,9 @@ fun String.toLowerCaseFirstOne(): String {
 }
 
 /**
- * Create valid Dart file name for class (snake_case)
+ * Create valid Dart file name for class
+ *
+ * Example: `ClassName` -> `class_name`
  */
 fun createFileName(className: String): String {
     var fileName = ""
