@@ -2,7 +2,6 @@ package com.justprodev.dart_json_generator.generator
 
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.justprodev.dart_json_generator.utils.toLowerCaseFirstOne
 import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
 
 abstract class Clazz(
@@ -13,15 +12,15 @@ abstract class Clazz(
 ) {
     companion object {
         operator fun invoke(root: MutableList<Clazz>, name: String, any: Any?): Clazz {
-            // 处理空值
+            // translate to english: Handle null values
             if (any == null || "null" == any.toString())
                 return EmptyClazz(root, name, any, null)
 
-            // 处理对象
+            // translate to english: Handle objects
             if (any is JsonObject)
                 return ObjectClazz(root, name, any, json2Clazz(root, any))
 
-            // 处理数组
+            // translate to english: Handle arrays
             if (any is JsonArray) {
                 return if (any.size() == 0) {
                     ListClazz(root, name, any, null, null)
@@ -31,7 +30,7 @@ abstract class Clazz(
                 }
             }
 
-            // 处理基本类型
+            // Handle basic types
             if (any.isBoolean())
                 return BaseClazz(root, "bool", name, any, null)
 
@@ -41,11 +40,11 @@ abstract class Clazz(
             if (any.isDouble() || any.isFloat())
                 return BaseClazz(root, "double", name, any, null)
 
-            // 都不匹配的情况，默认为 String 类型
+            // If none of the above matches, it defaults to the String type
             return  BaseClazz(root, "String", name, any, null)
         }
 
-        fun json2Clazz(root: MutableList<Clazz>, jsonObject: JsonObject): List<Clazz> {
+        private fun json2Clazz(root: MutableList<Clazz>, jsonObject: JsonObject): List<Clazz> {
             val list = mutableListOf<Clazz>()
             for (o in jsonObject.entrySet()) {
                 val entry = o as Map.Entry<*, *>
@@ -62,10 +61,7 @@ abstract class Clazz(
     }
 
     fun getStatement() = "${getClassName()}? ${getCamelName()}"
-    fun getFieldName() = getClassName().toLowerCaseFirstOne()
     fun getCamelName() = name.split("_").reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
-    fun getComment() = "$name : ${content.toString().replace("\n", "")}"
-    fun getJsonAssignment() = "\"$name\": ${toJson()}"
 
     abstract fun toJson(): String
     abstract fun getAssignments(parent: String): List<String>

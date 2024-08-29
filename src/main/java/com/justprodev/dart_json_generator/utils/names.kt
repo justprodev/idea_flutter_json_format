@@ -1,15 +1,5 @@
 package com.justprodev.dart_json_generator.utils
 
-fun String.toUpperCaseFirstOne(): String {
-    if (isEmpty()) return this
-    return if (Character.isUpperCase(this[0])) this else Character.toUpperCase(this[0]) + this.substring(1)
-}
-
-fun String.toLowerCaseFirstOne(): String {
-    if (this.isEmpty()) return this
-    return if (Character.isLowerCase(this[0])) this else Character.toLowerCase(this[0]) + this.substring(1)
-}
-
 /**
  * Create valid Dart file name for class
  *
@@ -27,4 +17,20 @@ fun createFileName(className: String): String {
         prevChar = char
     }
     return fileName
+}
+
+/**
+ * Create valid Dart class name from file name
+ *
+ * Example: `class_name` -> `ClassName`
+ */
+fun createClassName(fileName: String): String {
+    return fileName.toUpperCaseFirstOne()
+        .split("_")
+        .reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
+}
+
+fun String.toUpperCaseFirstOne(): String {
+    if (isEmpty()) return this
+    return if (Character.isUpperCase(this[0])) this else Character.toUpperCase(this[0]) + this.substring(1)
 }

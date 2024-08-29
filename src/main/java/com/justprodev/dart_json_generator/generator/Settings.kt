@@ -1,4 +1,4 @@
-package com.justprodev.dart_json_generator.utils
+package com.justprodev.dart_json_generator.generator
 
 import com.intellij.ide.util.PropertiesComponent
 

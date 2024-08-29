@@ -8,8 +8,9 @@ import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiFile
-import com.justprodev.dart_json_generator.generator.ClazzGenerator
-import com.justprodev.dart_json_generator.utils.Settings
+import com.justprodev.dart_json_generator.generator.Generator
+import com.justprodev.dart_json_generator.generator.ModelName
+import com.justprodev.dart_json_generator.generator.Settings
 import com.justprodev.dart_json_generator.utils.JSONUtils
 import com.justprodev.dart_json_generator.utils.createFileName
 import java.awt.BorderLayout
@@ -17,19 +18,20 @@ import javax.swing.*
 
 private const val PADDING = 10
 
-class Model(val className: String, val fileName: String)
 
 /**
+ * Dialog for generating dart model class for serializing/deserializing JSON
+ *
  * @param project
  * @param input file with JSON
- * @param model proposed className & fileName
+ * @param modelName not null if known file name and class name
  * @param onGenerate user tap generate (dialog will be closed)
  */
 class GeneratorDialog(
     private val project: Project,
     private val input: PsiFile,
-    private val model: Model? = null,
-    private val onGenerate: (fileName: String, code: String) -> Unit
+    private val modelName: ModelName? = null,
+    private val onGenerate: (modelName: ModelName, code: String) -> Unit
 ) {
     private val frame: JFrame
     private var jsonElement: JsonElement? = null
@@ -74,7 +76,7 @@ class GeneratorDialog(
 
         lateinit var classNameField: JTextField
 
-        val button = JButton("Generate ${model?.className ?: ""}").apply {
+        val button = JButton("Generate ${modelName?.className ?: ""}").apply {
             isEnabled = false
             addActionListener {
                 //settings.generateComments = commentCb.isSelected
@@ -91,31 +93,33 @@ class GeneratorDialog(
                     return@addActionListener
                 }
 
-                val model = this@GeneratorDialog.model ?: Model(
-                    className = classNameField.text,
-                    fileName = createFileName(classNameField.text)
-                )
+                val modelName = modelName ?: ModelName(classNameField.text, createFileName(classNameField.text))
 
-                val code = ClazzGenerator(settings).generate(model.fileName, model.className, input.text)
+                val code = Generator(settings).generate(modelName, input.text)
 
-                onGenerate(model.fileName, code)
+                onGenerate(modelName, code)
 
                 frame.dispose()
             }
         }
 
         classNameField = JTextField().apply {
-            text = model?.className ?: ""
-            if (model != null) isEnabled = false
-            document.addDocumentListener(object : javax.swing.event.DocumentListener {
-                override fun insertUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
-                override fun removeUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
-                override fun changedUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
+            if(modelName == null) {
+                // watch for changes in class name field to update button text
+                document.addDocumentListener(object : javax.swing.event.DocumentListener {
+                    override fun insertUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
+                    override fun removeUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
+                    override fun changedUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
 
-                private fun updateGeneratorButton() {
-                    button.text = "Generate ${classNameField.text}"
-                }
-            })
+                    private fun updateGeneratorButton() {
+                        button.text = "Generate ${classNameField.text}"
+                    }
+                })
+            } else {
+                // if class name is known, disable field and set button text
+                isEnabled = false
+                text = modelName.className
+            }
         }
 
         val formatButton = JButton("Format").apply {

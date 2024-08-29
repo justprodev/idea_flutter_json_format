@@ -3,16 +3,19 @@ package com.justprodev.dart_json_generator.generator
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
-import com.google.gson.JsonParser
-import com.intellij.util.containers.isNullOrEmpty
 import com.justprodev.dart_json_generator.utils.JSONUtils
-import com.justprodev.dart_json_generator.utils.Settings
 import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
 import java.lang.IllegalStateException
 
-class ClazzGenerator(val settings: Settings?) {
+/***
+ * Generate Dart model class from JSON
+ */
+class Generator(val settings: Settings?) {
 
-    fun generate(fileName: String, className: String, json: String) = try {
+    fun generate(modelName: ModelName, json: String) = try {
+        val className = modelName.className
+        val fileName = modelName.fileName
+
         JSONUtils.parse(json).let {
             when (it) {
                 is JsonObject -> it.asJsonObject

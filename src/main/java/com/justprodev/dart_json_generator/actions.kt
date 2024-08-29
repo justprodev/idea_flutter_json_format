@@ -10,28 +10,23 @@ import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ModuleRootManager
-import com.intellij.openapi.ui.Messages
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiFileFactory
 import com.intellij.psi.PsiManager
 import com.intellij.psi.util.PsiUtilBase
+import com.justprodev.dart_json_generator.generator.ModelName
 import com.justprodev.dart_json_generator.ui.GeneratorDialog
-import com.justprodev.dart_json_generator.ui.Model
 import com.justprodev.dart_json_generator.utils.*
-import java.io.IOException
-import javax.swing.JFrame
 
 class DartJsonGenerateAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.getData(PlatformDataKeys.PROJECT) as Project
         val input = PsiFileFactory.getInstance(project).createFileFromText(Language.findLanguageByID(JsonLanguage.INSTANCE.id)!!, "")
         val output = PsiUtilBase.getPsiFileInEditor(event.getData(PlatformDataKeys.EDITOR) as Editor, project)!!.virtualFile
-        val className = output.nameWithoutExtension.toUpperCaseFirstOne()
-            .split("_")
-            .reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
+        val className = createClassName(output.nameWithoutExtension)
 
-        GeneratorDialog(project, input, Model(className, output.nameWithoutExtension)) { _, code ->
+        GeneratorDialog(project, input, ModelName(className, output.nameWithoutExtension)) { _, code ->
             output.write(project, code)
         }
     }
@@ -55,12 +50,12 @@ class DartJsonNewFileAction : AnAction() {
             }
         } ?: return
 
-        GeneratorDialog(project, input) { fileName, code ->
-            val runnable = Runnable {
+        GeneratorDialog(project, input) { modelName, code ->
+            val fileName = modelName.fileName
+            WriteCommandAction.runWriteCommandAction(project) {
                 val output = PsiFileFactory.getInstance(project).createFileFromText("${fileName.trim('`')}.dart", DartFileType(), code)
                 directory.add(output)
             }
-            WriteCommandAction.runWriteCommandAction(project, runnable)
         }
     }
 }
