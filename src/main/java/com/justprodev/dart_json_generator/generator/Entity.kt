@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
+import com.justprodev.dart_json_generator.utils.toCamelCase
 import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
 
 /**
@@ -40,7 +41,7 @@ private class ObjectEntity(
     override val name: String,
     override val children: List<Entity>?
 ) : Entity(name, children) {
-    override val type = name.toUpperCaseFirstOne()
+    override val type = name.toUpperCaseFirstOne().toCamelCase()
 }
 
 /**
