@@ -73,12 +73,9 @@ class GeneratorDialog(
 
         lateinit var classNameField: JTextField
 
-        val button = JButton("Generate ${modelName?.className ?: ""}").apply {
+        val generateButton = JButton("Generate ${modelName?.className ?: ""}").apply {
             isEnabled = false
             addActionListener {
-                //settings.generateComments = commentCb.isSelected
-                settings.save()
-
                 if (classNameField.text.isEmpty()) {
                     JOptionPane.showMessageDialog(
                         frame,
@@ -90,11 +87,14 @@ class GeneratorDialog(
                     return@addActionListener
                 }
 
+                val jsonElement = json.element ?: return@addActionListener
                 val modelName = modelName ?: ModelName(classNameField.text, createFileName(classNameField.text))
 
-                val code = Generator(settings).generate(modelName, editor.document.text)
+                val code = Generator(settings).generate(modelName, jsonElement)
 
                 onGenerate(modelName, code)
+
+                settings.save()
 
                 frame.dispose()
             }
@@ -109,7 +109,7 @@ class GeneratorDialog(
                     override fun changedUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
 
                     private fun updateGeneratorButton() {
-                        button.text = "Generate ${classNameField.text}"
+                        generateButton.text = "Generate ${classNameField.text}"
                     }
                 })
             } else {
@@ -137,7 +137,7 @@ class GeneratorDialog(
             layout = BorderLayout()
             border = BorderFactory.createEmptyBorder(PADDING, 0, 0, 0)
             add(formatButton, BorderLayout.WEST)
-            add(button, BorderLayout.CENTER)
+            add(generateButton, BorderLayout.CENTER)
         }, BorderLayout.SOUTH)
 
         add(JPanel().apply {
@@ -153,8 +153,9 @@ class GeneratorDialog(
             override fun beforeDocumentChange(event: DocumentEvent) = Unit
 
             override fun documentChanged(event: DocumentEvent) {
+                generateButton.isEnabled = false
                 json.validate(event.document.text) { element ->
-                    button.isEnabled = element != null
+                    generateButton.isEnabled = element != null
                     formatButton.isEnabled = element != null
                 }
             }

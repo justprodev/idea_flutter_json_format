@@ -1,64 +1,50 @@
 package com.justprodev.dart_json_generator.generator
 
+
 import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.google.gson.JsonParseException
-import com.google.gson.JsonParser
 import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
-import java.lang.IllegalStateException
 
 /***
  * Generate Dart model class from JSON
  */
 class Generator(val settings: Settings?) {
 
-    fun generate(modelName: ModelName, json: String) = try {
+    fun generate(modelName: ModelName, jsonElement: JsonElement): String {
         val className = modelName.className
         val fileName = modelName.fileName
 
-        JsonParser.parseString(json).let {
-            when (it) {
-                is JsonObject -> it.asJsonObject
-                is JsonArray -> it.asJsonArray[0].asJsonObject
-                else -> null
-            }
-        }.let { obj ->
-            mutableListOf<Clazz>().let {
-                Clazz(it, className, obj) to it
-            }
-        }.let { (clazz, clazzes) ->
-            val sb = StringBuilder()
+        val jsonObject = when (jsonElement) {
+            is JsonObject -> jsonElement.asJsonObject
+            is JsonArray -> jsonElement.asJsonArray[0].asJsonObject
+            else -> null
+        }
 
-            sb.append("import 'package:freezed_annotation/freezed_annotation.dart';\n\n")
-            sb.append("part '$fileName.freezed.dart';\n")
-            sb.append("part '$fileName.g.dart';\n\n")
+        val clazzes = mutableListOf<Clazz>()
+        val root = Clazz(clazzes, className, jsonObject)
+
+        val sb = StringBuilder().apply {
+            append("import 'package:freezed_annotation/freezed_annotation.dart';\n\n")
+            append("part '$fileName.freezed.dart';\n")
+            append("part '$fileName.g.dart';\n\n")
 
             clazzes.reversed().forEach {
-                sb.append(printClazz(it == clazz, it))
-                sb.append("\n\n")
+                append(it.toString(it == root))
+                append("\n\n")
             }
-            sb.toString()
         }
-    } catch (jsonParseException: JsonParseException) {
-        jsonParseException.printStackTrace()
-        "error: not supported json"
-    } catch (illegalStateException: IllegalStateException) {
-        illegalStateException.printStackTrace()
 
-        if (illegalStateException.message?.startsWith("Not a JSON Object") == true) {
-            "error: not supported json"
-        } else {
-            "error: unknown"
-        }
+        return sb.toString()
     }
 
-    private fun printClazz(keepName: Boolean, clazz: Clazz): String {
+    private fun Clazz.toString(keepName: Boolean): String {
         val sb = StringBuilder()
 
         val className = if (keepName)
-            clazz.name.toUpperCaseFirstOne()
+            name.toUpperCaseFirstOne()
         else
-            clazz.getClassName().toUpperCaseFirstOne()
+            getClassName().toUpperCaseFirstOne()
 
 
         // comments
@@ -77,9 +63,9 @@ class Generator(val settings: Settings?) {
 
         // constructor
         sb.append("  const factory $className(")
-        if (clazz.children != null && clazz.children!!.isNotEmpty()) {
+        if (children != null && children!!.isNotEmpty()) {
             sb.append("{")
-            clazz.children!!.map {
+            children!!.map {
                 "\n    @JsonKey(name: '${it.name}') ${it.getStatement()},"
             }.forEach {
                 sb.append(it)

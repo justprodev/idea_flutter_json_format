@@ -13,7 +13,8 @@ class JsonContainer {
     private val mutex = Mutex()
     private val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
 
-    private var element: JsonElement? = null
+    var element: JsonElement? = null
+        private set
 
     fun validate(json: String, result: (JsonElement?) -> Unit) {
         if (mutex.isLocked) return

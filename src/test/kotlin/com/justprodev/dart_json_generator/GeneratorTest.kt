@@ -1,5 +1,6 @@
 package com.justprodev.dart_json_generator
 
+import com.google.gson.JsonParser
 import com.justprodev.dart_json_generator.generator.Generator
 import com.justprodev.dart_json_generator.generator.ModelName
 import java.io.BufferedReader
@@ -24,7 +25,7 @@ class GeneratorTest {
     @org.junit.jupiter.api.Test
     fun generate() {
         val json = File(Generator::class.java.classLoader.getResource("test.json")!!.toURI()).readText()
-        val model = Generator(null).generate(ModelName(testModelName, testModelFileName), json)
+        val model = Generator(null).generate(ModelName(testModelName, testModelFileName), JsonParser.parseString(json))
 
         assert(testDartModel(model)) { "Dart tests not passed" }
     }
