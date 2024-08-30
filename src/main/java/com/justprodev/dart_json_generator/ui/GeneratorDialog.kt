@@ -17,6 +17,7 @@ import com.justprodev.dart_json_generator.generator.Settings
 import com.justprodev.dart_json_generator.utils.JsonContainer
 import com.justprodev.dart_json_generator.utils.createFileName
 import java.awt.BorderLayout
+import java.awt.Window
 import javax.swing.*
 
 private const val PADDING = 10
@@ -34,51 +35,69 @@ class GeneratorDialog(
     private val modelName: ModelName? = null,
     private val onGenerate: (modelName: ModelName, code: String) -> Unit
 ) {
-    private val frame: JFrame
+    private val settings = Settings()
     private val json = JsonContainer()
-    private val editor = project.createEditor()
+
+    // components
+    private lateinit var window: Window
+    private lateinit var classNameField: JTextField
+    private lateinit var editor: Editor
+    private lateinit var generateButton: JButton
+    private lateinit var formatButton: JButton
 
     init {
-        frame = JFrame("Create dart model class for serializing/deserializing JSON").apply {
-            val root = FocusManager.getCurrentManager().activeWindow
-            setSize(root?.let { (it.width * 0.65).toInt() } ?: 700, root?.let { (it.height * 0.65).toInt() } ?: 520)
-            defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
-            add(build())
-            isVisible = true
-            setLocationRelativeTo(root)
-        }
+        createClassNameField()
+        createEditor()
+        createGenerateButton()
+        createFormatButton()
+        createWindow()
     }
 
-    private fun build(): JComponent {
-        return JPanel().apply {
-            layout = BorderLayout()
-            border = BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING)
-            placeComponents(this)
-        }
-    }
-
-    private fun prettify(postAction: () -> Unit) {
-        json.prettify { prettyJson ->
-            SwingUtilities.invokeLater {
-                WriteCommandAction.runWriteCommandAction(project) {
-                    editor.document.setText(prettyJson)
-                    postAction()
+    private fun createFormatButton() {
+        formatButton = JButton("Format").apply {
+            isEnabled = false
+            addActionListener {
+                isEnabled = false
+                json.prettify { prettyJson ->
+                    SwingUtilities.invokeLater {
+                        WriteCommandAction.runWriteCommandAction(project) {
+                            editor.document.setText(prettyJson)
+                            isEnabled = true
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun placeComponents(panel: JPanel) = panel.apply {
-        val settings = Settings()
+    private fun createClassNameField() {
+        classNameField = JTextField().apply {
+            if (modelName == null) {
+                // watch for changes in class name field to update button text
+                document.addDocumentListener(object : javax.swing.event.DocumentListener {
+                    override fun insertUpdate(p0: javax.swing.event.DocumentEvent?) = onChange(text)
+                    override fun removeUpdate(p0: javax.swing.event.DocumentEvent?) = onChange(text)
+                    override fun changedUpdate(p0: javax.swing.event.DocumentEvent?) = onChange(text)
 
-        lateinit var classNameField: JTextField
+                    private fun onChange(text: String) {
+                        generateButton.text = "Generate $text"
+                    }
+                })
+            } else {
+                // if class name is known, disable field and set button text
+                isEnabled = false
+                text = modelName.className
+            }
+        }
+    }
 
-        val generateButton = JButton("Generate ${modelName?.className ?: ""}").apply {
+    private fun createGenerateButton() {
+        generateButton = JButton("Generate ${modelName?.className ?: ""}").apply {
             isEnabled = false
             addActionListener {
                 if (classNameField.text.isEmpty()) {
                     JOptionPane.showMessageDialog(
-                        frame,
+                        window,
                         "Please input class name",
                         "Inane error",
                         JOptionPane.ERROR_MESSAGE
@@ -96,70 +115,57 @@ class GeneratorDialog(
 
                 settings.save()
 
-                frame.dispose()
+                window.dispose()
             }
         }
+    }
 
-        classNameField = JTextField().apply {
-            if (modelName == null) {
-                // watch for changes in class name field to update button text
-                document.addDocumentListener(object : javax.swing.event.DocumentListener {
-                    override fun insertUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
-                    override fun removeUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
-                    override fun changedUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
+    private fun createWindow() {
+        window = JFrame("Create dart model class for serializing/deserializing JSON").apply {
+            val root = FocusManager.getCurrentManager().activeWindow
+            setSize(root?.let { (it.width * 0.65).toInt() } ?: 700, root?.let { (it.height * 0.65).toInt() } ?: 520)
+            defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
+            add(JPanel().apply {
+                layout = BorderLayout()
+                border = BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING)
 
-                    private fun updateGeneratorButton() {
-                        generateButton.text = "Generate ${classNameField.text}"
+                add(editor.component, BorderLayout.CENTER)
+
+                add(JPanel().apply {
+                    layout = BorderLayout()
+                    border = BorderFactory.createEmptyBorder(PADDING, 0, 0, 0)
+                    add(formatButton, BorderLayout.WEST)
+                    add(generateButton, BorderLayout.CENTER)
+                }, BorderLayout.SOUTH)
+
+                add(JPanel().apply {
+                    layout = BorderLayout().apply {
+                        hgap = PADDING
                     }
-                })
-            } else {
-                // if class name is known, disable field and set button text
-                isEnabled = false
-                text = modelName.className
-            }
+                    border = BorderFactory.createEmptyBorder(0, 0, PADDING, 0)
+                    add(JLabel("Dart class name:"), BorderLayout.WEST)
+                    add(classNameField, BorderLayout.CENTER)
+                }, BorderLayout.NORTH)
+            })
+            isVisible = true
+            setLocationRelativeTo(root)
         }
+    }
 
-        val formatButton = JButton("Format").apply {
-            isEnabled = false
-            addActionListener {
-                isEnabled = false
-                prettify {
-                    isEnabled = true
+    private fun createEditor() {
+        editor = project.createEditor().apply {
+            document.addDocumentListener(object : DocumentListener {
+                override fun beforeDocumentChange(event: DocumentEvent) = Unit
+
+                override fun documentChanged(event: DocumentEvent) {
+                    generateButton.isEnabled = false
+                    json.validate(event.document.text) { element ->
+                        generateButton.isEnabled = element != null
+                        formatButton.isEnabled = element != null
+                    }
                 }
-            }
+            })
         }
-
-        //val commentCb = JCheckBox("generate comments", settings.generateComments)
-
-        add(editor.component, BorderLayout.CENTER)
-
-        add(JPanel().apply {
-            layout = BorderLayout()
-            border = BorderFactory.createEmptyBorder(PADDING, 0, 0, 0)
-            add(formatButton, BorderLayout.WEST)
-            add(generateButton, BorderLayout.CENTER)
-        }, BorderLayout.SOUTH)
-
-        add(JPanel().apply {
-            layout = BorderLayout().apply {
-                hgap = PADDING
-            }
-            border = BorderFactory.createEmptyBorder(0, 0, PADDING, 0)
-            add(JLabel("Dart class name:"), BorderLayout.WEST)
-            add(classNameField, BorderLayout.CENTER)
-        }, BorderLayout.NORTH)
-
-        editor.document.addDocumentListener(object : DocumentListener {
-            override fun beforeDocumentChange(event: DocumentEvent) = Unit
-
-            override fun documentChanged(event: DocumentEvent) {
-                generateButton.isEnabled = false
-                json.validate(event.document.text) { element ->
-                    generateButton.isEnabled = element != null
-                    formatButton.isEnabled = element != null
-                }
-            }
-        })
     }
 }
 
