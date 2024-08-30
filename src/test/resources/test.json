@@ -2,83 +2,101 @@
   "code": "2000",
   "data": {
     "test_field": "aaa",
-    "facetofaceAddress": {
+    "facetoface_address": {
       "address": "",
-      "receiver": "罗",
-      "receiverCellphone": "1388345****",
+      "receiver": "Luo",
+      "receiver_cellphone": "1388345****",
       "sid": "001190e19e754001b53701d0aa81bfe0",
-      "sortNumber": 1,
-      "title": "女士",
+      "sort_number": 1,
+      "title": "Ms.",
       "type": "FACETOFACE",
-      "userSid": "a19cf6e3586143d283dd4128c456bfaf"
+      "user_sid": "a19cf6e3586143d283dd4128c456bfaf"
     },
     "order": {
       "bidding": 2300,
-      "brokerAvatar": "broker/getAvatar?key=avatar/b82378ccaccb403c9d8420274372c904",
-      "brokerCellphone": "1347282****",
-      "brokerDealNum": 15,
-      "brokerName": "王**",
-      "brokerSid": "b82378ccaccb403c9d8420274372c904",
-      "brokerStars": 4.5,
+      "broker_avatar": "broker/getAvatar?key=avatar/b82378ccaccb403c9d8420274372c904",
+      "broker_cellphone": "1347282****",
+      "broker_deal_num": 15,
+      "broker_name": "Wang**",
+      "broker_sid": "b82378ccaccb403c9d8420274372c904",
+      "broker_stars": 4.5,
       "code": "1512151307270113",
       "cover": "show/getPoster?key=52f30bbce4ef4122919cbc95c2f01c36/52f30bbce4ef4122919cbc95c2f01c36",
-      "createdDatetime": "2015-12-15 13:07:28",
-      "deliveryAddressSid": "c25c1954ca204dee8fc18f51bcc71a3e",
-      "deliveryFee": 0,
-      "evaluateStarts": 0,
-      "isDelete": false,
-      "isSequential": false,
-      "orderStatus": "CLOSED",
-      "orderStatusArray": [{
-        "operateDatetime": "2015-12-15 13:07:28",
-        "operateUserSid": "b82378ccaccb403c9d8420274372c904",
-        "operateUsername": "王**",
-        "orderSid": "21bc3cc65e9e47af952c1f4f1f0fd85a",
-        "orderType": "1",
-        "sid": "04940ed81540466ea4408f79989a5d54",
-        "state": "TAKING"
-      }],
-      "orderStatusDesp": "",
-      "orderType": "1",
-      "payType": "",
-      "postTicketSid": "65cc6d54300349e984134ecd0faf3ede",
-      "receiveDatetime": "2015-12-15 13:07:28",
-      "receiver": "张**",
-      "receiverAddress": "控江路1209",
-      "receiverCellphone": "1502379****",
-      "receiverTitle": "先生",
+      "created_datetime": "2015-12-15 13:07:28",
+      "delivery_address_sid": "c25c1954ca204dee8fc18f51bcc71a3e",
+      "delivery_fee": 0,
+      "evaluate_starts": 0,
+      "is_delete": false,
+      "is_sequential": false,
+      "order_status": "CLOSED",
+      "order_status_array": [
+        {
+          "operate_datetime": "2015-12-15 13:07:28",
+          "operate_user_sid": "b82378ccaccb403c9d8420274372c904",
+          "operate_username": "Wang**",
+          "order_sid": "21bc3cc65e9e47af952c1f4f1f0fd85a",
+          "order_type": "1",
+          "sid": "04940ed81540466ea4408f79989a5d54",
+          "state": "TAKING"
+        }
+      ],
+      "order_status_desp": "",
+      "order_type": "1",
+      "pay_type": "",
+      "post_ticket_sid": "65cc6d54300349e984134ecd0faf3ede",
+      "receive_datetime": "2015-12-15 13:07:28",
+      "receiver": "Zhang**",
+      "receiver_address": "Kongjiang Road 1209",
+      "receiver_cellphone": "1502379****",
+      "receiver_title": "Mr.",
       "remark": "",
-      "requestDatetime": "2015-12-15 13:07:28",
-      "showName": "Love Radio 品冠 现在你在哪里 巡回演唱会上海站",
-      "showSchedule": "2016-01-09 19:30:00",
-      "showScheduleSid": "eecfd0657fb445a7a36abedc9b621c89",
-      "showSid": "52f30bbce4ef4122919cbc95c2f01c36",
+      "request_datetime": "2015-12-15 13:07:28",
+      "show_name": "Love Radio Pin Guan Where Are You Now Tour Concert Shanghai Station",
+      "show_schedule": "2016-01-09 19:30:00",
+      "show_schedule_sid": "eecfd0657fb445a7a36abedc9b621c89",
+      "show_sid": "52f30bbce4ef4122919cbc95c2f01c36",
       "sid": "21bc3cc65e9e47af952c1f4f1f0fd85a",
-      "stateDesp": "已关闭",
-      "ticketPrice": 88000,
-      "ticketQuantity": 1,
-      "ticketSid": "c4583aa8a79a478e8e5cd14691028430",
-      "totalPrice": 2300,
-      "tradeType": "EXPRESS",
-      "userCellphone": "1502379****",
-      "userLeaveMessage": "",
-      "userSid": "a19cf6e3586143d283dd4128c456bfaf",
-      "venueAddress": "上海市长宁区武夷路777号",
-      "venueName": "上海国际体操中心"
+      "state_desp": "Closed",
+      "ticket_price": 88000,
+      "ticket_quantity": 1,
+      "ticket_sid": "c4583aa8a79a478e8e5cd14691028430",
+      "total_price": 2300,
+      "trade_type": "EXPRESS",
+      "user_cellphone": "1502379****",
+      "user_leave_message": "",
+      "user_sid": "a19cf6e3586143d283dd4128c456bfaf",
+      "venue_address": "No. 777 Wuyi Road, Changning District, Shanghai",
+      "venue_name": "Shanghai International Gymnastics Center"
     }
   },
-  "testFromList": [
+  "test_from_list": [
     {
-      "testKey" : "testValue"
+      "test_key": "testValue"
     }
   ],
-  "extraData": {},
+  "extra_data": [],
   "message": "",
   "success": true,
-  "intList": [1, 2, 3],
-  "boolList": [true, false, true, true],
-  "doubleList": [0.0, 1.1, 2.2, 3.3],
-  "emptyList": [],
-  "nullList": [null],
-  "nullObj": null
+  "int_list": [
+    1,
+    2,
+    3
+  ],
+  "bool_list": [
+    true,
+    false,
+    true,
+    true
+  ],
+  "double_list": [
+    0.324542354353425342436764765746575473434564564564564,
+    1.100000000000000088817841970012523233890533447265625,
+    2.20000000000000017763568394002504646778106689453125,
+    3.29999999999999982236431605997495353221893310546875
+  ],
+  "empty_list": [],
+  "null_list": [
+    null
+  ],
+  "null_obj": null
 }
