@@ -1,6 +1,5 @@
 package com.justprodev.dart_json_generator.ui
 
-import com.google.gson.JsonElement
 import com.intellij.json.JsonLanguage
 import com.intellij.lang.Language
 import com.intellij.openapi.command.WriteCommandAction
@@ -15,7 +14,7 @@ import com.intellij.psi.PsiFileFactory
 import com.justprodev.dart_json_generator.generator.Generator
 import com.justprodev.dart_json_generator.generator.ModelName
 import com.justprodev.dart_json_generator.generator.Settings
-import com.justprodev.dart_json_generator.utils.JSONUtils
+import com.justprodev.dart_json_generator.utils.JsonContainer
 import com.justprodev.dart_json_generator.utils.createFileName
 import java.awt.BorderLayout
 import javax.swing.*
@@ -36,8 +35,8 @@ class GeneratorDialog(
     private val onGenerate: (modelName: ModelName, code: String) -> Unit
 ) {
     private val frame: JFrame
-    private var jsonElement: JsonElement? = null
-    private val editor = TextEditorProvider.getInstance().createEditor(project, input.virtualFile)
+    private val json = JsonContainer()
+    private val editor = project.createEditor()
 
     init {
         frame = JFrame("Create dart model class for serializing/deserializing JSON").apply {
@@ -59,15 +58,11 @@ class GeneratorDialog(
     }
 
     private fun prettify(postAction: () -> Unit) {
-        val jsonElement = jsonElement ?: return
-
-        JSONUtils.prettify(jsonElement) { prettyJson ->
-            (editor as? TextEditor)?.editor?.let { editor ->
-                SwingUtilities.invokeLater {
-                    WriteCommandAction.runWriteCommandAction(project) {
-                        editor.document.setText(prettyJson)
-                        postAction()
-                    }
+        json.prettify { prettyJson ->
+            SwingUtilities.invokeLater {
+                WriteCommandAction.runWriteCommandAction(project) {
+                    editor.document.setText(prettyJson)
+                    postAction()
                 }
             }
         }
@@ -106,7 +101,7 @@ class GeneratorDialog(
         }
 
         classNameField = JTextField().apply {
-            if(modelName == null) {
+            if (modelName == null) {
                 // watch for changes in class name field to update button text
                 document.addDocumentListener(object : javax.swing.event.DocumentListener {
                     override fun insertUpdate(p0: javax.swing.event.DocumentEvent?) = updateGeneratorButton()
@@ -158,11 +153,9 @@ class GeneratorDialog(
             override fun beforeDocumentChange(event: DocumentEvent) = Unit
 
             override fun documentChanged(event: DocumentEvent) {
-                val json = event.document.text
-                JSONUtils.validate(json) { element ->
+                json.validate(event.document.text) { element ->
                     button.isEnabled = element != null
                     formatButton.isEnabled = element != null
-                    jsonElement = element
                 }
             }
         })

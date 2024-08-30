@@ -8,10 +8,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-object JSONUtils {
+class JsonContainer {
     private var validateJob: Job? = null
     private val mutex = Mutex()
     private val gson = GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create()
+
+    private var element: JsonElement? = null
 
     fun validate(json: String, result: (JsonElement?) -> Unit) {
         if (mutex.isLocked) return
@@ -30,6 +32,8 @@ object JSONUtils {
                 null
             }
 
+            this@JsonContainer.element = element
+
             result(element)
         }
     }
@@ -37,7 +41,9 @@ object JSONUtils {
     /**
      * Prettify JSON
      */
-    fun prettify(element: JsonElement, result: (String) -> Unit) {
+    fun prettify(result: (String) -> Unit) {
+        val element = element ?: return
+
         validateJob?.invokeOnCompletion {
             GlobalScope.launch(Dispatchers.IO) {
                 mutex.withLock {
