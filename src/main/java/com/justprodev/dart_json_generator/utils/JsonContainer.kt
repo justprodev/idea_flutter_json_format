@@ -52,6 +52,4 @@ object JSONUtils {
             }
         }
     }
-
-    fun parse(json: String): JsonElement = JsonParser.parseReader(json.reader())
 }

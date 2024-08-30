@@ -3,7 +3,7 @@ package com.justprodev.dart_json_generator.generator
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
-import com.justprodev.dart_json_generator.utils.JSONUtils
+import com.google.gson.JsonParser
 import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
 import java.lang.IllegalStateException
 
@@ -16,7 +16,7 @@ class Generator(val settings: Settings?) {
         val className = modelName.className
         val fileName = modelName.fileName
 
-        JSONUtils.parse(json).let {
+        JsonParser.parseString(json).let {
             when (it) {
                 is JsonObject -> it.asJsonObject
                 is JsonArray -> it.asJsonArray[0].asJsonObject
