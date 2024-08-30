@@ -12,7 +12,11 @@ void main() {
       final newModel = NewModel.fromJson(json.decode(plainJson1));
 
       // compare serialized model from json VS NewModel
-      expect(true, json.encode(json.decode(plainJson1)) == json.encode(newModel.toJson()));
+      expect(
+        true,
+        json.encode(json.decode(plainJson1)) == json.encode(newModel.toJson()),
+        reason: 'serialized model from json != NewModel',
+      );
     });
   });
 }

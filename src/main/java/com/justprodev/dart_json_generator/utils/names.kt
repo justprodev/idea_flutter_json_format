@@ -24,11 +24,12 @@ fun createFileName(className: String): String {
  *
  * Example: `class_name` -> `ClassName`
  */
-fun createClassName(fileName: String): String {
-    return fileName.toUpperCaseFirstOne()
-        .split("_")
-        .reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
-}
+fun createClassName(filename: String) = filename.toUpperCaseFirstOne().toCamelCase()
+
+/**
+ * Convert snake_case to camelCase
+ */
+fun String.toCamelCase() = this.split("_").reduce { acc, s -> "$acc${s.toUpperCaseFirstOne()}" }
 
 fun String.toUpperCaseFirstOne(): String {
     if (isEmpty()) return this

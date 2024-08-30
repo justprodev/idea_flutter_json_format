@@ -4,7 +4,7 @@ package com.justprodev.dart_json_generator.generator
 import com.google.gson.JsonArray
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
-import com.justprodev.dart_json_generator.utils.toUpperCaseFirstOne
+import com.justprodev.dart_json_generator.utils.toCamelCase
 
 /***
  * Generate Dart model class from JSON
@@ -18,19 +18,19 @@ class Generator(val settings: Settings?) {
         val jsonObject = when (jsonElement) {
             is JsonObject -> jsonElement.asJsonObject
             is JsonArray -> jsonElement.asJsonArray[0].asJsonObject
-            else -> null
+            else -> jsonElement
         }
 
-        val clazzes = mutableListOf<Clazz>()
-        val root = Clazz(clazzes, className, jsonObject)
+        val allEntities = mutableListOf<Entity>()
+        createEntity(allEntities, className, jsonObject)
 
         val sb = StringBuilder().apply {
             append("import 'package:freezed_annotation/freezed_annotation.dart';\n\n")
             append("part '$fileName.freezed.dart';\n")
             append("part '$fileName.g.dart';\n\n")
 
-            clazzes.reversed().forEach {
-                append(it.toString(it == root))
+            allEntities.reversed().forEach {
+                appendEntity(it)
                 append("\n\n")
             }
         }
@@ -38,47 +38,38 @@ class Generator(val settings: Settings?) {
         return sb.toString()
     }
 
-    private fun Clazz.toString(keepName: Boolean): String {
-        val sb = StringBuilder()
+    private fun StringBuilder.appendEntity(entity: Entity) {
+        with(entity) {
+            // class
+            append("@freezed\n")
+            append("class $type with _\$$type {\n")
 
-        val className = if (keepName)
-            name.toUpperCaseFirstOne()
-        else
-            getClassName().toUpperCaseFirstOne()
-
-
-        // comments
-//        if (settings?.generateComments == true) {
-//            clazz.children?.map {
-//                "// ${it.getComment()}\n"
-//            }?.forEach {
-//                sb.append(it)
-//            }
-//            sb.append("\n")
-//        }
-
-        // class
-        sb.append("@freezed\n")
-            .append("class $className with _\$$className {\n")
-
-        // constructor
-        sb.append("  const factory $className(")
-        if (children != null && children!!.isNotEmpty()) {
-            sb.append("{")
-            children!!.map {
-                "\n    @JsonKey(name: '${it.name}') ${it.getStatement()},"
-            }.forEach {
-                sb.append(it)
+            // constructor
+            append("  const factory $type(")
+            if (children != null && children!!.isNotEmpty()) {
+                append("{")
+                children!!.forEach {
+                    appendField(it)
+                }
+                append("\n  }")
             }
-            sb.append("\n  }")
+            append(") = _$type;\n\n")
+
+            // json
+            append("  factory $type.fromJson(Map<String, Object?> json) => _\$${type}FromJson(json);\n")
+
+            append("}")
         }
-        sb.append(") = _$className;\n\n")
+    }
+}
 
-        // json
-        sb.append("  factory $className.fromJson(Map<String, Object?> json) => _\$${className}FromJson(json);\n")
-
-        sb.append("}")
-
-        return sb.toString()
+private fun StringBuilder.appendField(entity: Entity) {
+    with(entity) {
+        append("\n    @JsonKey(name: '${name}')")
+        append(" $type")
+        if (type != "dynamic") {
+            append("?")
+        }
+        append(" ${name.toCamelCase()},")
     }
 }
