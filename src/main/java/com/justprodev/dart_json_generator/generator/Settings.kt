@@ -3,19 +3,24 @@ package com.justprodev.dart_json_generator.generator
 import com.intellij.ide.util.PropertiesComponent
 
 class Settings {
+    private val properties = PropertiesComponent.getInstance()
 
-    companion object {
-        private const val KEY_COMMENT = "dart_json_format_comment"
+    val data = load()
+
+    fun save() {
+        properties.setValue("show", data.show, false)
+        properties.setValue("useDefaults", data.useDefaults, false)
     }
 
-    //var generateComments: Boolean
-
-    init {
-        val propertiesComponent = PropertiesComponent.getInstance()
-        //generateComments = propertiesComponent.getBoolean(KEY_COMMENT, true)
-    }
-
-    fun save() = PropertiesComponent.getInstance().apply {
-        //setValue(KEY_COMMENT, generateComments.toString())
+    private fun load(): SettingsData {
+        return SettingsData(
+            show = properties.getBoolean("show", false),
+            useDefaults = properties.getBoolean("useDefaults", false),
+        )
     }
 }
+
+class SettingsData(
+    var show: Boolean,
+    var useDefaults: Boolean,
+)
