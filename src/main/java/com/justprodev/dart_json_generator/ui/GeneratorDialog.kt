@@ -1,13 +1,17 @@
 package com.justprodev.dart_json_generator.ui
 
 import com.google.gson.JsonElement
+import com.intellij.json.JsonLanguage
+import com.intellij.lang.Language
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.event.DocumentEvent
 import com.intellij.openapi.editor.event.DocumentListener
 import com.intellij.openapi.fileEditor.TextEditor
 import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
 import com.intellij.openapi.project.Project
-import com.intellij.psi.PsiFile
+import com.intellij.openapi.util.Disposer
+import com.intellij.psi.PsiFileFactory
 import com.justprodev.dart_json_generator.generator.Generator
 import com.justprodev.dart_json_generator.generator.ModelName
 import com.justprodev.dart_json_generator.generator.Settings
@@ -23,13 +27,11 @@ private const val PADDING = 10
  * Dialog for generating dart model class for serializing/deserializing JSON
  *
  * @param project
- * @param input file with JSON
  * @param modelName not null if known file name and class name
- * @param onGenerate user tap generate (dialog will be closed)
+ * @param onGenerate invoked when generate button is clicked
  */
 class GeneratorDialog(
     private val project: Project,
-    private val input: PsiFile,
     private val modelName: ModelName? = null,
     private val onGenerate: (modelName: ModelName, code: String) -> Unit
 ) {
@@ -95,7 +97,7 @@ class GeneratorDialog(
 
                 val modelName = modelName ?: ModelName(classNameField.text, createFileName(classNameField.text))
 
-                val code = Generator(settings).generate(modelName, input.text)
+                val code = Generator(settings).generate(modelName, editor.document.text)
 
                 onGenerate(modelName, code)
 
@@ -152,7 +154,7 @@ class GeneratorDialog(
             add(classNameField, BorderLayout.CENTER)
         }, BorderLayout.NORTH)
 
-        (editor as? TextEditor)?.editor?.document?.addDocumentListener(object : DocumentListener {
+        editor.document.addDocumentListener(object : DocumentListener {
             override fun beforeDocumentChange(event: DocumentEvent) = Unit
 
             override fun documentChanged(event: DocumentEvent) {
@@ -165,4 +167,15 @@ class GeneratorDialog(
             }
         })
     }
+}
+
+private fun Project.createEditor(): Editor {
+    val editor = TextEditorProvider.getInstance().createEditor(
+        this,
+        PsiFileFactory.getInstance(this).createFileFromText(Language.findLanguageByID(JsonLanguage.INSTANCE.id)!!, "").virtualFile
+    ) as TextEditor
+
+    Disposer.register(this, editor)
+
+    return editor.editor
 }

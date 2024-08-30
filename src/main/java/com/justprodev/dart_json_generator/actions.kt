@@ -22,11 +22,10 @@ import com.justprodev.dart_json_generator.utils.*
 class DartJsonGenerateAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.getData(PlatformDataKeys.PROJECT) as Project
-        val input = PsiFileFactory.getInstance(project).createFileFromText(Language.findLanguageByID(JsonLanguage.INSTANCE.id)!!, "")
         val output = PsiUtilBase.getPsiFileInEditor(event.getData(PlatformDataKeys.EDITOR) as Editor, project)!!.virtualFile
         val className = createClassName(output.nameWithoutExtension)
 
-        GeneratorDialog(project, input, ModelName(className, output.nameWithoutExtension)) { _, code ->
+        GeneratorDialog(project, ModelName(className, output.nameWithoutExtension)) { _, code ->
             output.write(project, code)
         }
     }
@@ -35,7 +34,6 @@ class DartJsonGenerateAction : AnAction() {
 class DartJsonNewFileAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = event.getData(PlatformDataKeys.PROJECT) as Project
-        val input = PsiFileFactory.getInstance(project).createFileFromText(Language.findLanguageByID(JsonLanguage.INSTANCE.id)!!, "")
 
         val directory = when (val navigatable = LangDataKeys.NAVIGATABLE.getData(event.dataContext)) {
             is PsiDirectory -> navigatable
@@ -50,7 +48,7 @@ class DartJsonNewFileAction : AnAction() {
             }
         } ?: return
 
-        GeneratorDialog(project, input) { modelName, code ->
+        GeneratorDialog(project) { modelName, code ->
             val fileName = modelName.fileName
             WriteCommandAction.runWriteCommandAction(project) {
                 val output = PsiFileFactory.getInstance(project).createFileFromText("${fileName.trim('`')}.dart", DartFileType(), code)
