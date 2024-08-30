@@ -8,6 +8,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+/**
+ * Container for JSON element
+ *
+ * Used for validating and prettifying JSON
+ *
+ * The flow is:
+ *
+ * 1. Validate JSON
+ * 2. Prettify JSON
+  */
 class JsonContainer {
     private var validateJob: Job? = null
     private val mutex = Mutex()
@@ -16,6 +26,14 @@ class JsonContainer {
     var element: JsonElement? = null
         private set
 
+    /**
+     * Validate JSON
+     *
+     * `element` will be updated with parsed JSON
+     *
+     * @param json JSON string
+     * @param result invoked when validation is done
+     */
     fun validate(json: String, result: (JsonElement?) -> Unit) {
         if (mutex.isLocked) return
 
@@ -40,7 +58,9 @@ class JsonContainer {
     }
 
     /**
-     * Prettify JSON
+     * Prettify JSON from `element`
+     *
+     * @param result invoked when prettifying is done
      */
     fun prettify(result: (String) -> Unit) {
         val element = element ?: return
