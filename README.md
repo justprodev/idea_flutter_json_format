@@ -1,3 +1,5 @@
+# Use https://github.com/justprodev/json-to-freezed-intellij
+
 [![Version](https://img.shields.io/jetbrains/plugin/v/16971-dartjsongenerator.svg)](https://plugins.jetbrains.com/plugin/16971-dartjsongenerator)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/16971-dartjsongenerator.svg)](https://plugins.jetbrains.com/plugin/16971-dartjsongenerator)
 
