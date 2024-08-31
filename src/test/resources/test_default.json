@@ -1,0 +1,7 @@
+{
+  "string_v": "string",
+  "list_V": [1,2,3],
+  "bool_v": false,
+  "int_v": 11,
+  "double_v": 131.324
+}
