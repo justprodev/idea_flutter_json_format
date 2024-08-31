@@ -9,7 +9,7 @@ import com.justprodev.dart_json_generator.utils.toCamelCase
 /***
  * Generate Dart model class from JSON
  */
-class Generator(val settings: Settings?) {
+class Generator(private val settings: SettingsData) {
 
     fun generate(modelName: ModelName, jsonElement: JsonElement): String {
         val className = modelName.className
@@ -49,6 +49,7 @@ class Generator(val settings: Settings?) {
             if (children != null && children!!.isNotEmpty()) {
                 append("{")
                 children!!.forEach {
+                    append("\n    ")
                     appendField(it)
                 }
                 append("\n  }")
@@ -61,15 +62,40 @@ class Generator(val settings: Settings?) {
             append("}")
         }
     }
-}
 
-private fun StringBuilder.appendField(entity: Entity) {
-    with(entity) {
-        append("\n    @JsonKey(name: '${name}')")
-        append(" $type")
-        if (type != "dynamic") {
-            append("?")
+    private fun StringBuilder.appendField(entity: Entity) {
+        with(entity) {
+            append("@JsonKey(name: '${name}') ")
+            appendType(this)
+            append(" ${name.toCamelCase()},")
         }
-        append(" ${name.toCamelCase()},")
+    }
+
+    private fun StringBuilder.appendType(entity: Entity) {
+        with(entity) {
+            if (type == "dynamic") {
+                append("dynamic")
+                return
+            }
+
+            // try to add @Default annotation with value
+            val defaultValue: String? = when {
+                type == "int" && settings.useDefaultInt -> "0"
+                type == "double" && settings.useDefaultDouble -> "0.0"
+                type == "String" && settings.useDefaultString -> "''"
+                type == "bool" && settings.useDefaultBool -> "false"
+                type.startsWith("List") && settings.useDefaultList -> "[]"
+                else -> null
+            }
+
+            // determined default value
+            if(defaultValue != null) {
+                append("@Default($defaultValue) $type")
+                return
+            } else {
+                // add nullable
+                append("$type?")
+            }
+        }
     }
 }

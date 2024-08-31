@@ -38,3 +38,5 @@ pubspec.lock
 
 /dart/lib/model/new_model.dart
 /local.properties
+/dart/lib/model/default_model.dart
+/dart/lib/model/standard_model.dart

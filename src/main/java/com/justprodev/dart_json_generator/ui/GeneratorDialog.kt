@@ -20,7 +20,6 @@ import com.justprodev.dart_json_generator.generator.Generator
 import com.justprodev.dart_json_generator.generator.ModelName
 import com.justprodev.dart_json_generator.generator.Settings
 import com.justprodev.dart_json_generator.utils.JsonContainer
-import com.justprodev.dart_json_generator.utils.createFileName
 import com.justprodev.dart_json_generator.utils.getString
 import java.awt.BorderLayout
 import java.awt.Dimension
@@ -118,9 +117,9 @@ class GeneratorDialog(
                 settings.save()
 
                 val jsonElement = json.element ?: return@addActionListener
-                val modelName = modelName ?: ModelName(classNameField.text, createFileName(classNameField.text))
+                val modelName = modelName ?: ModelName.fromClassName(classNameField.text)
 
-                val code = Generator(settings).generate(modelName, jsonElement)
+                val code = Generator(settings.data).generate(modelName, jsonElement)
 
                 onGenerate(modelName, code)
 
@@ -130,7 +129,7 @@ class GeneratorDialog(
     }
 
     private fun createWindow() {
-        window = JFrame(getString("create.dart.model.class.for.serializing.deserializing.json")).apply {
+        window = JFrame(getString("dialog.title")).apply {
             val root = FocusManager.getCurrentManager().activeWindow
             setSize(root?.let { (it.width * 0.65).toInt() } ?: 700, root?.let { (it.height * 0.65).toInt() } ?: 520)
             defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE
